@@ -100,16 +100,16 @@ export function onCloudAuthChange(callback: (email: string | null) => void): () 
 
 /**
  * Lee el perfil y los favoritos del usuario autenticado.
- * Devuelve un snapshot vacío si no hay cliente, sesión, datos o si algo falla.
+ * Devuelve un snapshot vacío si la nube no tiene datos, y null si no se pudo leer
+ * (sin cliente, sin sesión o error): así nunca se confunde "vacío" con "falló".
  */
-export async function fetchCloudSnapshot(): Promise<CloudSnapshot> {
-  const empty: CloudSnapshot = { profile: null, bookmarkedVerseIds: [] };
+export async function fetchCloudSnapshot(): Promise<CloudSnapshot | null> {
   const client = getBrowserSupabaseClient();
-  if (!client) return empty;
+  if (!client) return null;
 
   try {
     const { data: auth, error: authError } = await client.auth.getUser();
-    if (authError || !auth.user) return empty;
+    if (authError || !auth.user) return null;
     const userId = auth.user.id;
 
     const [profileRes, bookmarksRes] = await Promise.all([
@@ -121,7 +121,9 @@ export async function fetchCloudSnapshot(): Promise<CloudSnapshot> {
       client.from('user_bookmarks').select('verse_id').eq('user_id', userId),
     ]);
 
-    const row = profileRes.error ? null : profileRes.data;
+    if (profileRes.error || bookmarksRes.error) return null;
+
+    const row = profileRes.data;
     const profile =
       row && isTraditionSlug(row.tradition)
         ? {
@@ -132,12 +134,64 @@ export async function fetchCloudSnapshot(): Promise<CloudSnapshot> {
           }
         : null;
 
-    const bookmarkedVerseIds = bookmarksRes.error
-      ? []
-      : (bookmarksRes.data ?? []).map((b) => String(b.verse_id));
+    const bookmarkedVerseIds = (bookmarksRes.data ?? []).map((b) => String(b.verse_id));
 
     return { profile, bookmarkedVerseIds };
   } catch {
-    return empty;
+    return null;
+  }
+}
+
+/**
+ * Sincroniza de forma idempotente los favoritos del usuario autenticado con `user_bookmarks`:
+ * - Inserta los que faltan en la nube, sólo si el versículo ya existe en `verses` (FK); los demás
+ *   se omiten sin error y se reintentan en la siguiente sincronización.
+ * - Elimina de la nube los que el usuario ya no tiene marcados.
+ * Nunca toca el estado local. Devuelve false, sin lanzar errores, si no hay cliente o sesión
+ * o si la base de datos falla.
+ */
+export async function syncUserBookmarksToCloud(verseIds: readonly string[]): Promise<boolean> {
+  const client = getBrowserSupabaseClient();
+  if (!client) return false;
+
+  try {
+    const { data: auth, error: authError } = await client.auth.getUser();
+    if (authError || !auth.user) return false;
+    const userId = auth.user.id;
+    const wanted = Array.from(new Set(verseIds));
+
+    const existing = await client.from('user_bookmarks').select('verse_id').eq('user_id', userId);
+    if (existing.error) return false;
+    const inCloud = new Set((existing.data ?? []).map((r) => String(r.verse_id)));
+
+    const missing = wanted.filter((id) => !inCloud.has(id));
+    if (missing.length > 0) {
+      const known = await client.from('verses').select('id').in('id', missing);
+      if (known.error) return false;
+      const populated = new Set((known.data ?? []).map((r) => String(r.id)));
+      const toInsert = missing.filter((id) => populated.has(id));
+
+      if (toInsert.length > 0) {
+        const { error } = await client.from('user_bookmarks').upsert(
+          toInsert.map((verse_id) => ({ user_id: userId, verse_id })),
+          { onConflict: 'user_id,verse_id', ignoreDuplicates: true }
+        );
+        if (error) return false;
+      }
+    }
+
+    const toDelete = [...inCloud].filter((id) => !wanted.includes(id));
+    if (toDelete.length > 0) {
+      const { error } = await client
+        .from('user_bookmarks')
+        .delete()
+        .eq('user_id', userId)
+        .in('verse_id', toDelete);
+      if (error) return false;
+    }
+
+    return true;
+  } catch {
+    return false;
   }
 }

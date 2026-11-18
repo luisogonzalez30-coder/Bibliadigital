@@ -30,6 +30,7 @@ import {
   onCloudAuthChange,
   signInWithMagicLink,
   signOutCloudUser,
+  syncUserBookmarksToCloud,
   syncUserProfileToCloud,
 } from "@/services/supabaseRepository";
 import { isSupabaseConfigured } from "@/services/supabaseReady";
@@ -43,6 +44,12 @@ function triggerCloudSyncIfReady(nextState: UserSanctuaryState): void {
   void syncUserProfileToCloud(nextState).catch(() => {});
 }
 
+/** Igual que el perfil: segundo plano, sin bloquear ni alterar la UI. */
+function triggerBookmarksSyncIfReady(verseIds: readonly string[]): void {
+  if (!isSupabaseConfigured()) return;
+  void syncUserBookmarksToCloud(verseIds).catch(() => {});
+}
+
 export default function Home() {
   // Estado inicial seguro (idéntico en servidor y cliente); el guardado se lee tras montar.
   const [state, setState] = useState<UserSanctuaryState>(DEFAULT_USER_STATE);
@@ -52,6 +59,8 @@ export default function Home() {
   const [storiesOpen, setStoriesOpen] = useState(false);
   const [cloudEmail, setCloudEmail] = useState<string | null>(null);
   const stateRef = useRef(state);
+  // true sólo tras leer la nube con éxito: evita que un favorito marcado antes de hidratar borre datos remotos.
+  const cloudReadyRef = useRef(false);
   const [postalVerse, setPostalVerse] = useState<CanonicalVerse | null>(null);
 
   useEffect(() => {
@@ -105,13 +114,17 @@ export default function Home() {
 
   // Al iniciar sesión: hidrata desde la nube fusionando con lo local y respalda el resultado.
   useEffect(() => {
+    cloudReadyRef.current = false;
     if (!cloudEmail) return;
     let alive = true;
     void fetchCloudSnapshot().then((snapshot) => {
-      if (!alive) return;
+      // null = la lectura falló: se conserva todo lo local y no se sincroniza nada.
+      if (!alive || snapshot === null) return;
       const merged = mergeCloudState(stateRef.current, snapshot);
       setState(merged);
+      cloudReadyRef.current = true;
       triggerCloudSyncIfReady(merged);
+      triggerBookmarksSyncIfReady(merged.bookmarkedVerseIds);
     });
     return () => {
       alive = false;
@@ -129,8 +142,12 @@ export default function Home() {
   );
 
   const handleToggleBookmark = useCallback(
-    (verseId: string) => setState((s) => toggleBookmark(s, verseId)),
-    [],
+    (verseId: string) => {
+      const next = toggleBookmark(state, verseId);
+      setState(next);
+      if (cloudReadyRef.current) triggerBookmarksSyncIfReady(next.bookmarkedVerseIds);
+    },
+    [state],
   );
 
   const registerTodayReading = useCallback(() => {
