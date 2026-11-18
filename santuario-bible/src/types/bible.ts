@@ -60,3 +60,14 @@ export interface UserSanctuaryState {
   lastReadDate: string | null; // Formato YYYY-MM-DD
   bookmarkedVerseIds: string[];
 }
+
+/**
+ * Lo que se lee de la nube para un usuario autenticado (vacío si no hay datos o sesión).
+ */
+export interface CloudSnapshot {
+  profile: Pick<
+    UserSanctuaryState,
+    'tradition' | 'currentStreak' | 'longestStreak' | 'lastReadDate'
+  > | null;
+  bookmarkedVerseIds: string[];
+}

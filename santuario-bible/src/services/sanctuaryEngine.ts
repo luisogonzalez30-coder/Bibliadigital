@@ -1,5 +1,6 @@
 import {
   CanonicalVerse,
+  CloudSnapshot,
   EmotionSlug,
   TraditionSlug,
   UserSanctuaryState,
@@ -132,6 +133,42 @@ export function toggleBookmark(
     bookmarkedVerseIds: exists
       ? state.bookmarkedVerseIds.filter((id) => id !== verseId)
       : [...state.bookmarkedVerseIds, verseId],
+  };
+}
+
+/* ───────────── Fusión local + nube ───────────── */
+
+/**
+ * Hidrata el estado local con lo leído de la nube sin perder datos locales:
+ * - Nube vacía → se conserva el estado local.
+ * - Tradición: la de la nube cuando existe perfil.
+ * - Racha: se toma la de la lectura más reciente (empate → la mayor); mejor racha = máximo.
+ * - Favoritos: unión sin duplicados.
+ * Las preferencias visuales (idioma espejo, día/noche) siempre son locales.
+ */
+export function mergeCloudState(
+  local: UserSanctuaryState,
+  cloud: CloudSnapshot
+): UserSanctuaryState {
+  const bookmarkedVerseIds = Array.from(
+    new Set([...local.bookmarkedVerseIds, ...cloud.bookmarkedVerseIds])
+  );
+  const p = cloud.profile;
+  if (!p) return { ...local, bookmarkedVerseIds };
+
+  const cloudIsNewer =
+    p.lastReadDate !== null &&
+    (local.lastReadDate === null || p.lastReadDate > local.lastReadDate);
+  const sameDay = p.lastReadDate === local.lastReadDate;
+  const useCloudStreak = cloudIsNewer || (sameDay && p.currentStreak > local.currentStreak);
+
+  return {
+    ...local,
+    tradition: p.tradition,
+    currentStreak: useCloudStreak ? p.currentStreak : local.currentStreak,
+    lastReadDate: cloudIsNewer ? p.lastReadDate : local.lastReadDate,
+    longestStreak: Math.max(local.longestStreak, p.longestStreak),
+    bookmarkedVerseIds,
   };
 }
 

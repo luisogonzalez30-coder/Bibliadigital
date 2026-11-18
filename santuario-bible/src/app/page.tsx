@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, Moon, Sun } from "lucide-react";
+import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
 import { PostalStudioModal } from "@/components/PostalStudioModal";
 import { SoulCompass } from "@/components/SoulCompass";
@@ -17,12 +18,20 @@ import {
   getActiveStreak,
   getVersesByTradition,
   loadUserState,
+  mergeCloudState,
   registerDailyReading,
   toggleBookmark,
   saveUserState,
   toLocalIsoDate,
 } from "@/services/sanctuaryEngine";
-import { syncUserProfileToCloud } from "@/services/supabaseRepository";
+import {
+  fetchCloudSnapshot,
+  getCloudUserEmail,
+  onCloudAuthChange,
+  signInWithMagicLink,
+  signOutCloudUser,
+  syncUserProfileToCloud,
+} from "@/services/supabaseRepository";
 import { isSupabaseConfigured } from "@/services/supabaseReady";
 import type { CanonicalVerse, TraditionSlug, UserSanctuaryState } from "@/types/bible";
 
@@ -41,6 +50,8 @@ export default function Home() {
   const [today, setToday] = useState<string | null>(null);
   const [verified, setVerified] = useState<CanonicalVerse[] | null>(null);
   const [storiesOpen, setStoriesOpen] = useState(false);
+  const [cloudEmail, setCloudEmail] = useState<string | null>(null);
+  const stateRef = useRef(state);
   const [postalVerse, setPostalVerse] = useState<CanonicalVerse | null>(null);
 
   useEffect(() => {
@@ -71,6 +82,41 @@ export default function Home() {
     document.documentElement.classList.toggle("dark", state.darkMode);
     if (mounted) saveUserState(state);
   }, [state, mounted]);
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  // Sesión en la nube (opcional): nunca bloquea el uso local.
+  useEffect(() => {
+    if (!mounted || !isSupabaseConfigured()) return;
+    let alive = true;
+    void getCloudUserEmail().then((email) => {
+      if (alive) setCloudEmail(email);
+    });
+    const unsubscribe = onCloudAuthChange((email) => {
+      if (alive) setCloudEmail(email);
+    });
+    return () => {
+      alive = false;
+      unsubscribe();
+    };
+  }, [mounted]);
+
+  // Al iniciar sesión: hidrata desde la nube fusionando con lo local y respalda el resultado.
+  useEffect(() => {
+    if (!cloudEmail) return;
+    let alive = true;
+    void fetchCloudSnapshot().then((snapshot) => {
+      if (!alive) return;
+      const merged = mergeCloudState(stateRef.current, snapshot);
+      setState(merged);
+      triggerCloudSyncIfReady(merged);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [cloudEmail]);
 
   const update = useCallback(
     (patch: Partial<UserSanctuaryState>) => setState((s) => ({ ...s, ...patch })),
@@ -194,6 +240,8 @@ export default function Home() {
           onComplete={handleCompleteReading}
         />
       )}
+
+      <CloudSyncPanel email={cloudEmail} onSendMagicLink={signInWithMagicLink} onSignOut={signOutCloudUser} />
 
       <PostalStudioModal
         verse={postalVerse}
