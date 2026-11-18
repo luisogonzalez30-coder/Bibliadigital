@@ -1,69 +1,120 @@
-import Image from "next/image";
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import { DeuterocanonNotice } from "@/components/DeuterocanonNotice";
+import { StreakPanel } from "@/components/StreakPanel";
+import { ToggleSwitch } from "@/components/ToggleSwitch";
+import { TraditionSelector } from "@/components/TraditionSelector";
+import { VerseCard } from "@/components/VerseCard";
+import { CANONICAL_VERSES } from "@/data/canonicalSeed";
+import {
+  DEFAULT_USER_STATE,
+  filterVerifiedVerses,
+  getActiveStreak,
+  getVersesByTradition,
+  loadUserState,
+  registerDailyReading,
+  saveUserState,
+  toLocalIsoDate,
+} from "@/services/sanctuaryEngine";
+import type { CanonicalVerse, UserSanctuaryState } from "@/types/bible";
+
+const PENDING_DEUTERO_BOOKS = ["WIS", "SIR", "TOB"] as const;
 
 export default function Home() {
+  // Estado inicial seguro (idéntico en servidor y cliente); el guardado se lee tras montar.
+  const [state, setState] = useState<UserSanctuaryState>(DEFAULT_USER_STATE);
+  const [mounted, setMounted] = useState(false);
+  const [today, setToday] = useState<string | null>(null);
+  const [verified, setVerified] = useState<CanonicalVerse[] | null>(null);
+
+  useEffect(() => {
+    // Lectura diferida (callback) tras montar: evita hydration mismatch y renders en cascada.
+    let alive = true;
+    queueMicrotask(() => {
+      if (!alive) return;
+      setState(loadUserState());
+      setToday(toLocalIsoDate());
+      setMounted(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    void filterVerifiedVerses(CANONICAL_VERSES).then((v) => {
+      if (alive) setVerified(v);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", state.darkMode);
+    if (mounted) saveUserState(state);
+  }, [state, mounted]);
+
+  const update = useCallback(
+    (patch: Partial<UserSanctuaryState>) => setState((s) => ({ ...s, ...patch })),
+    [],
+  );
+
+  const verses = useMemo(
+    () => (verified ? getVersesByTradition(state.tradition, verified) : []),
+    [verified, state.tradition],
+  );
+
+  const showDeuteroNotice =
+    (state.tradition === "catholic" || state.tradition === "universal") &&
+    PENDING_DEUTERO_BOOKS.some((osis) => !verses.some((v) => v.bookOsis === osis));
+
+  const readToday = today !== null && state.lastReadDate === today;
+  const activeStreak = today !== null ? getActiveStreak(state, today) : 0;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="mx-auto w-full max-w-2xl space-y-8 px-6 py-10">
+      <header className="flex items-center justify-between">
+        <h1 className="scripture text-3xl">Santuario</h1>
+        <button
+          type="button"
+          aria-label={state.darkMode ? "Activar modo día" : "Activar modo noche"}
+          onClick={() => update({ darkMode: !state.darkMode })}
+          className="rounded-full bg-sanct-surface p-2 text-sanct-accent"
+        >
+          {state.darkMode ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
+        </button>
+      </header>
+
+      <TraditionSelector value={state.tradition} onChange={(tradition) => update({ tradition })} />
+
+      <ToggleSwitch
+        label="Espejo bilingüe (mostrar también en inglés)"
+        checked={state.showParallelEnglish}
+        onChange={(showParallelEnglish) => update({ showParallelEnglish })}
+      />
+
+      <StreakPanel
+        activeStreak={activeStreak}
+        longestStreak={state.longestStreak}
+        readToday={readToday}
+        onMarkRead={() => today && setState((s) => registerDailyReading(s, today))}
+      />
+
+      {showDeuteroNotice && <DeuterocanonNotice />}
+
+      <section aria-label="Versículos" className="space-y-5">
+        {verified === null ? (
+          <p className="text-sm text-sanct-muted">Verificando textos…</p>
+        ) : (
+          verses.map((v) => (
+            <VerseCard key={v.id} verse={v} showParallelEnglish={state.showParallelEnglish} />
+          ))
+        )}
+      </section>
+    </main>
   );
 }
