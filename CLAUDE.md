@@ -5,8 +5,9 @@
 - Todo texto bíblico se lee exclusivamente de un catálogo verificado, copiado literal de la edición indicada.
 
 ## 2. Stack obligatorio
-- Next.js 14+ con App Router, React 18, TypeScript estricto (sin `any`).
-- Tailwind CSS + Lucide React.
+- Next.js 16+ con App Router, React 19, TypeScript estricto (sin `any`).
+- Tailwind CSS v4 (`@import "tailwindcss";` en el CSS global) + Lucide React.
+- Código de la app en `santuario-bible/` (`src/`, alias `@/*`).
 
 ## 3. Diseño "Modo Santuario" (minimalista)
 - Día (pergamino cálido): fondo `#FAF6F0`.
