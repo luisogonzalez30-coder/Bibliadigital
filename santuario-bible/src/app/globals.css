@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Modo Santuario · Día (Pergamino) */
+:root {
+  --sanct-bg: #faf6f0;
+  --sanct-surface: #f3ece1;
+  --sanct-text: #1c1917;
+  --sanct-text-muted: #57534e;
+  --sanct-accent: #d97706;
+  color-scheme: light;
+}
+
+/* Modo Santuario · Noche (Santuario Oscuro) */
+.dark {
+  --sanct-bg: #0c0a09;
+  --sanct-surface: #1c1917;
+  --sanct-text: #f5f5f4;
+  --sanct-text-muted: #a8a29e;
+  --sanct-accent: #f59e0b;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-sanct-bg: var(--sanct-bg);
+  --color-sanct-surface: var(--sanct-surface);
+  --color-sanct-text: var(--sanct-text);
+  --color-sanct-muted: var(--sanct-text-muted);
+  --color-sanct-accent: var(--sanct-accent);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+}
+
+body {
+  background: var(--sanct-bg);
+  color: var(--sanct-text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Escrituras: serif editorial */
+.scripture {
+  font-family: var(--font-playfair), Georgia, serif;
+}
