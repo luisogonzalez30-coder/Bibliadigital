@@ -22,9 +22,17 @@ import {
   saveUserState,
   toLocalIsoDate,
 } from "@/services/sanctuaryEngine";
-import type { CanonicalVerse, UserSanctuaryState } from "@/types/bible";
+import { syncUserProfileToCloud } from "@/services/supabaseRepository";
+import { isSupabaseConfigured } from "@/services/supabaseReady";
+import type { CanonicalVerse, TraditionSlug, UserSanctuaryState } from "@/types/bible";
 
 const PENDING_DEUTERO_BOOKS = ["WIS", "SIR", "TOB"] as const;
+
+/** Sincroniza en segundo plano; nunca bloquea ni altera la UI si falla o no hay sesión. */
+function triggerCloudSyncIfReady(nextState: UserSanctuaryState): void {
+  if (!isSupabaseConfigured()) return;
+  void syncUserProfileToCloud(nextState).catch(() => {});
+}
 
 export default function Home() {
   // Estado inicial seguro (idéntico en servidor y cliente); el guardado se lee tras montar.
@@ -79,10 +87,27 @@ export default function Home() {
     [],
   );
 
+  const registerTodayReading = useCallback(() => {
+    if (!today) return;
+    const next = registerDailyReading(state, today);
+    if (next === state) return;
+    setState(next);
+    triggerCloudSyncIfReady(next);
+  }, [state, today]);
+
   const handleCompleteReading = useCallback(() => {
-    if (today) setState((s) => registerDailyReading(s, today));
+    registerTodayReading();
     setStoriesOpen(false);
-  }, [today]);
+  }, [registerTodayReading]);
+
+  const handleTraditionChange = useCallback(
+    (tradition: TraditionSlug) => {
+      const next = { ...state, tradition };
+      setState(next);
+      triggerCloudSyncIfReady(next);
+    },
+    [state],
+  );
 
   const showDeuteroNotice =
     (state.tradition === "catholic" || state.tradition === "universal") &&
@@ -105,7 +130,7 @@ export default function Home() {
         </button>
       </header>
 
-      <TraditionSelector value={state.tradition} onChange={(tradition) => update({ tradition })} />
+      <TraditionSelector value={state.tradition} onChange={handleTraditionChange} />
 
       <ToggleSwitch
         label="Espejo bilingüe (mostrar también en inglés)"
@@ -117,7 +142,7 @@ export default function Home() {
         activeStreak={activeStreak}
         longestStreak={state.longestStreak}
         readToday={readToday}
-        onMarkRead={() => today && setState((s) => registerDailyReading(s, today))}
+        onMarkRead={registerTodayReading}
       />
 
       <button
