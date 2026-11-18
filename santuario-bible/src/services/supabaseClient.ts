@@ -1,6 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { isSupabaseConfigured } from '@/services/supabaseReady';
-import { TraditionSlug, UserSanctuaryState } from '@/types/bible';
 
 let browserClient: SupabaseClient | null = null;
 
