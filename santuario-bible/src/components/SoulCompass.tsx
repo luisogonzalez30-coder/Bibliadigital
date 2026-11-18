@@ -16,6 +16,7 @@ interface SoulCompassProps {
   showParallelEnglish: boolean;
   bookmarkedIds: readonly string[];
   onToggleBookmark: (verseId: string) => void;
+  onCreatePostal: (verse: CanonicalVerse) => void;
 }
 
 export function SoulCompass({
@@ -24,6 +25,7 @@ export function SoulCompass({
   showParallelEnglish,
   bookmarkedIds,
   onToggleBookmark,
+  onCreatePostal,
 }: SoulCompassProps) {
   const [emotion, setEmotion] = useState<EmotionSlug | null>(null);
   const selected = EMOTIONS_METADATA.find((e) => e.slug === emotion) ?? null;
@@ -80,6 +82,7 @@ export function SoulCompass({
                 showParallelEnglish={showParallelEnglish}
                 bookmarked={bookmarkedIds.includes(v.id)}
                 onToggleBookmark={onToggleBookmark}
+                onCreatePostal={onCreatePostal}
               />
             ))
           ) : (

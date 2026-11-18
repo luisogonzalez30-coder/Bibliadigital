@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BookOpen, Moon, Sun } from "lucide-react";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
+import { PostalStudioModal } from "@/components/PostalStudioModal";
 import { SoulCompass } from "@/components/SoulCompass";
 import { DeuterocanonNotice } from "@/components/DeuterocanonNotice";
 import { StreakPanel } from "@/components/StreakPanel";
@@ -32,6 +33,7 @@ export default function Home() {
   const [today, setToday] = useState<string | null>(null);
   const [verified, setVerified] = useState<CanonicalVerse[] | null>(null);
   const [storiesOpen, setStoriesOpen] = useState(false);
+  const [postalVerse, setPostalVerse] = useState<CanonicalVerse | null>(null);
 
   useEffect(() => {
     // Lectura diferida (callback) tras montar: evita hydration mismatch y renders en cascada.
@@ -134,6 +136,7 @@ export default function Home() {
           showParallelEnglish={state.showParallelEnglish}
           bookmarkedIds={state.bookmarkedVerseIds}
           onToggleBookmark={handleToggleBookmark}
+          onCreatePostal={setPostalVerse}
         />
       )}
 
@@ -150,6 +153,7 @@ export default function Home() {
               showParallelEnglish={state.showParallelEnglish}
               bookmarked={state.bookmarkedVerseIds.includes(v.id)}
               onToggleBookmark={handleToggleBookmark}
+              onCreatePostal={setPostalVerse}
             />
           ))
         )}
@@ -165,6 +169,12 @@ export default function Home() {
           onComplete={handleCompleteReading}
         />
       )}
+
+      <PostalStudioModal
+        verse={postalVerse}
+        showParallelEnglish={state.showParallelEnglish}
+        onClose={() => setPostalVerse(null)}
+      />
     </main>
   );
 }
