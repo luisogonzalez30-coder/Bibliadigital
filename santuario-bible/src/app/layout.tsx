@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { PwaRegistrar } from "@/components/PwaRegistrar";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -17,6 +18,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Santuario · Biblia",
   description: "Lectura diaria de las Escrituras, íntegra y verificada.",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "Santuario" },
+  icons: { apple: "/icons/apple-touch-icon.png" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAF6F0" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C0A09" },
+  ],
 };
 
 /** Aplica el tema guardado antes del primer pintado para evitar parpadeo día/noche. */
@@ -32,7 +42,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <PwaRegistrar />
+      </body>
     </html>
   );
 }

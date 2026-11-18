@@ -1,6 +1,6 @@
 # Santuario · Biblia
 
-MVP web de lectura bíblica diaria, minimalista y verificada. Next.js 16 (App Router) · React 19 · TypeScript estricto · Tailwind CSS v4.
+MVP web instalable (PWA) de lectura bíblica diaria, minimalista y verificada. Next.js 16 (App Router) · React 19 · TypeScript estricto · Tailwind CSS v4.
 
 ## Qué es
 
@@ -9,11 +9,12 @@ MVP web de lectura bíblica diaria, minimalista y verificada. Next.js 16 (App Ro
 - **Brújula del Alma:** eliges cómo te sientes (ansiedad, gratitud, duelo, cansancio, sabiduría) y ves los pasajes correspondientes.
 - **Modo Stories:** lectura diaria de 4 láminas con barra de progreso; al completarla se ilumina la **Racha de Luz**.
 - **Estudio de Postal 9:16:** genera y descarga una imagen PNG lista para compartir.
+- **PWA instalable:** incluye manifiesto (`src/app/manifest.ts`), íconos en `public/icons/` y un service worker (`public/sw.js`, caché `santuario-v1`, *network-first* solo para el mismo origen; nunca intercepta Supabase ni rutas `/api/`). Se registra únicamente en producción o en `localhost`, y se puede instalar desde el navegador.
 - **Local-first:** todo funciona sin cuenta, guardado en `localStorage`. El respaldo en **Supabase** (perfil, racha y favoritos) es opcional.
 
 > **Regla de Oro:** no se inventa, resume ni parafrasea ningún versículo. Todo texto sale de `src/data/canonicalSeed.ts` (RV1909 / KJV) y se valida por SHA-256 antes de mostrarse.
 
-**Estado conocido:** el catálogo tiene 9 pasajes. Los deuterocanónicos (Torres Amat) están pendientes de una fuente verificable y la app lo avisa a quien elige `catholic` o `universal`. Aún no incluye manifiesto ni service worker, por lo que todavía no es instalable como PWA.
+**Estado conocido:** el catálogo tiene 9 pasajes. Los deuterocanónicos (Torres Amat) están pendientes de una fuente verificable y la app lo avisa a quien elige `catholic` o `universal`.
 
 ## Desarrollo local
 
