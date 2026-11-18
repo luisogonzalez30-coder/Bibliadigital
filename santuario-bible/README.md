@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Santuario · Biblia
 
-## Getting Started
+Lectura diaria de las Escrituras, íntegra y verificada (SHA-256). Next.js 16 (App Router) · React 19 · TypeScript estricto · Tailwind CSS v4.
 
-First, run the development server:
+> **Regla de Oro:** no se inventa, resume ni parafrasea ningún versículo. Todo texto sale de `src/data/canonicalSeed.ts` (o de Supabase) y se valida por hash antes de mostrarse.
+
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+La app funciona sin Supabase: el estado (tradición, racha, favoritos) se guarda en `localStorage`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Comandos de calidad: `npx tsc --noEmit`, `npm run lint`, `npm run build`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Despliegue
 
-## Learn More
+El proyecto Next.js vive en la carpeta **`santuario-bible/`** del repositorio, no en la raíz. En ambos proveedores hay que indicarlo.
 
-To learn more about Next.js, take a look at the following resources:
+### Vercel
+1. *Add New → Project* e importa el repositorio.
+2. En **Root Directory** elige `santuario-bible`. Framework: Next.js (se detecta solo).
+3. (Opcional) En *Environment Variables* agrega `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+4. *Deploy*.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Netlify
+1. *Add new site → Import an existing project* y selecciona el repositorio.
+2. En **Base directory** escribe `santuario-bible`. Build command: `npm run build`. Netlify aplica su runtime de Next.js automáticamente.
+3. (Opcional) En *Site configuration → Environment variables* agrega las dos variables públicas de Supabase.
+4. *Deploy*.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> No cargues `SUPABASE_SERVICE_ROLE_KEY` en el hosting: solo se usa en tu máquina para el seed.
 
-## Deploy on Vercel
+## Conectar Supabase (opcional)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Crea el esquema.** En tu proyecto Supabase abre *SQL Editor*, pega el contenido de `supabase/migrations/01_santuario_schema.sql` y ejecútalo. Crea `verses`, `user_profiles` y `user_bookmarks` con RLS activo.
+2. **Variables de entorno.** Copia la plantilla y completa los valores (*Project Settings → API*):
+   ```bash
+   cp .env.example .env.local
+   ```
+   | Variable | Uso |
+   |---|---|
+   | `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto (navegador y seed) |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clave pública anon/publishable (navegador) |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Solo para el seed; nunca en frontend ni en el hosting |
+3. **Carga el catálogo.** Con las variables disponibles en tu terminal:
+   ```bash
+   set -a; source .env.local; set +a
+   npm run seed:verses
+   ```
+   El script verifica el SHA-256 de cada versículo antes de insertar y es idempotente: no modifica filas existentes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sin las variables públicas, `isSupabaseConfigured()` devuelve `false` y la app sigue usando solo `localStorage`.
