@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { BookOpen, Moon, Sun } from "lucide-react";
+import { DailyStoriesModal } from "@/components/DailyStoriesModal";
+import { SoulCompass } from "@/components/SoulCompass";
 import { DeuterocanonNotice } from "@/components/DeuterocanonNotice";
 import { StreakPanel } from "@/components/StreakPanel";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
@@ -15,6 +17,7 @@ import {
   getVersesByTradition,
   loadUserState,
   registerDailyReading,
+  toggleBookmark,
   saveUserState,
   toLocalIsoDate,
 } from "@/services/sanctuaryEngine";
@@ -28,6 +31,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [today, setToday] = useState<string | null>(null);
   const [verified, setVerified] = useState<CanonicalVerse[] | null>(null);
+  const [storiesOpen, setStoriesOpen] = useState(false);
 
   useEffect(() => {
     // Lectura diferida (callback) tras montar: evita hydration mismatch y renders en cascada.
@@ -68,6 +72,16 @@ export default function Home() {
     [verified, state.tradition],
   );
 
+  const handleToggleBookmark = useCallback(
+    (verseId: string) => setState((s) => toggleBookmark(s, verseId)),
+    [],
+  );
+
+  const handleCompleteReading = useCallback(() => {
+    if (today) setState((s) => registerDailyReading(s, today));
+    setStoriesOpen(false);
+  }, [today]);
+
   const showDeuteroNotice =
     (state.tradition === "catholic" || state.tradition === "universal") &&
     PENDING_DEUTERO_BOOKS.some((osis) => !verses.some((v) => v.bookOsis === osis));
@@ -104,6 +118,25 @@ export default function Home() {
         onMarkRead={() => today && setState((s) => registerDailyReading(s, today))}
       />
 
+      <button
+        type="button"
+        onClick={() => setStoriesOpen(true)}
+        disabled={verified === null || today === null}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-sanct-accent px-5 py-3 text-sm font-medium text-sanct-bg disabled:opacity-50"
+      >
+        <BookOpen size={16} aria-hidden /> Lectura diaria · 2 min
+      </button>
+
+      {verified !== null && (
+        <SoulCompass
+          tradition={state.tradition}
+          verifiedVerses={verified}
+          showParallelEnglish={state.showParallelEnglish}
+          bookmarkedIds={state.bookmarkedVerseIds}
+          onToggleBookmark={handleToggleBookmark}
+        />
+      )}
+
       {showDeuteroNotice && <DeuterocanonNotice />}
 
       <section aria-label="Versículos" className="space-y-5">
@@ -111,10 +144,27 @@ export default function Home() {
           <p className="text-sm text-sanct-muted">Verificando textos…</p>
         ) : (
           verses.map((v) => (
-            <VerseCard key={v.id} verse={v} showParallelEnglish={state.showParallelEnglish} />
+            <VerseCard
+              key={v.id}
+              verse={v}
+              showParallelEnglish={state.showParallelEnglish}
+              bookmarked={state.bookmarkedVerseIds.includes(v.id)}
+              onToggleBookmark={handleToggleBookmark}
+            />
           ))
         )}
       </section>
+
+      {storiesOpen && verified !== null && today !== null && (
+        <DailyStoriesModal
+          tradition={state.tradition}
+          todayIso={today}
+          verifiedVerses={verified}
+          showParallelEnglish={state.showParallelEnglish}
+          onClose={() => setStoriesOpen(false)}
+          onComplete={handleCompleteReading}
+        />
+      )}
     </main>
   );
 }

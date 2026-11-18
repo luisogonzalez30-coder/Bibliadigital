@@ -119,6 +119,22 @@ export function getActiveStreak(
   return 0;
 }
 
+/* ───────────── Favoritos ───────────── */
+
+/** Agrega o quita un versículo de favoritos (sin duplicados, inmutable). */
+export function toggleBookmark(
+  state: UserSanctuaryState,
+  verseId: string
+): UserSanctuaryState {
+  const exists = state.bookmarkedVerseIds.includes(verseId);
+  return {
+    ...state,
+    bookmarkedVerseIds: exists
+      ? state.bookmarkedVerseIds.filter((id) => id !== verseId)
+      : [...state.bookmarkedVerseIds, verseId],
+  };
+}
+
 /* ───────────── Integridad (Regla de Oro) ───────────── */
 
 async function sha256Hex(text: string): Promise<string> {
