@@ -2,8 +2,8 @@
  * - Network-first con respaldo en caché, sólo para GET del mismo origen.
  * - Nunca intercepta ni cachea peticiones externas (p. ej. Supabase) ni rutas /api/.
  */
-const CACHE = 'santuario-v1';
-const PRECACHE = ['/', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png'];
+const CACHE = 'santuario-v2';
+const PRECACHE = ['/', '/santuario', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -50,7 +50,9 @@ self.addEventListener('fetch', (event) => {
         const cached = await caches.match(request);
         if (cached) return cached;
         if (request.mode === 'navigate') {
-          const shell = await caches.match('/');
+          // Sin conexión: la app (/santuario) o, en otras páginas, el inicio.
+          const path = new URL(request.url).pathname;
+          const shell = await caches.match(path.startsWith('/santuario') ? '/santuario' : '/');
           if (shell) return shell;
         }
         return Response.error();
