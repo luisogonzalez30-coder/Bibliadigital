@@ -6,6 +6,7 @@ import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
 import { PostalStudioModal } from "@/components/PostalStudioModal";
+import { ProblemAdvisor } from "@/components/ProblemAdvisor";
 import { SettingsSheet } from "@/components/SettingsSheet";
 import { SoulCompass } from "@/components/SoulCompass";
 import { Umbral } from "@/components/Umbral";
@@ -264,6 +265,17 @@ export default function Home() {
           >
             <BookOpen size={16} aria-hidden /> Lectura diaria · 2 min
           </button>
+
+          {verified !== null && (
+            <ProblemAdvisor
+              tradition={state.tradition}
+              verifiedVerses={verified}
+              showParallelEnglish={state.showParallelEnglish}
+              bookmarkedIds={state.bookmarkedVerseIds}
+              onToggleBookmark={handleToggleBookmark}
+              onCreatePostal={setPostalVerse}
+            />
+          )}
 
           {verified !== null && (
             <SoulCompass
