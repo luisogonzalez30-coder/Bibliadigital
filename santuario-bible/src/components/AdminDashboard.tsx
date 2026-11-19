@@ -172,6 +172,40 @@ export function AdminDashboard() {
             </ul>
           </section>
 
+          <section aria-label="Origen" className="space-y-3">
+            <h2 className="scripture text-2xl">Origen (utm)</h2>
+            {(view.data.sources ?? []).length === 0 ? (
+              <p className="text-sm text-sanct-muted">Aún sin visitas con utm. Usa enlaces como /historias/david-y-goliat?utm_source=tiktok&amp;utm_campaign=historias&amp;utm_content=voz-hombre</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs uppercase text-sanct-muted">
+                    <tr>
+                      <th className="py-2">Fuente</th>
+                      <th>Campaña</th>
+                      <th>Contenido</th>
+                      <th>Dispositivos</th>
+                      <th>Instalaciones</th>
+                      <th>Lecturas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(view.data.sources ?? []).map((s) => (
+                      <tr key={`${s.source}-${s.campaign}-${s.content}`} className="border-t border-sanct-border">
+                        <td className="py-2 pr-3">{s.source}</td>
+                        <td className="pr-3">{s.campaign}</td>
+                        <td className="pr-3">{s.content}</td>
+                        <td>{s.devices}</td>
+                        <td>{s.installs}</td>
+                        <td>{s.reads}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+
           <section aria-label="Cuentas" className="space-y-3">
             <h2 className="scripture text-2xl">Quién lee (cuentas con correo)</h2>
             <div className="overflow-x-auto">

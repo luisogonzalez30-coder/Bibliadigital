@@ -9,7 +9,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 /** Botón "Instalar app": usa el aviso nativo si el navegador lo ofrece; si no, lleva a las instrucciones. */
-export function InstallAppButton({ className = "" }: { className?: string }) {
+export function InstallAppButton({ className = "", fallbackHref = "#instalar" }: { className?: string; fallbackHref?: string }) {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function InstallAppButton({ className = "" }: { className?: string }) {
     );
   }
   return (
-    <a href="#instalar" className={className}>
+    <a href={fallbackHref} className={className}>
       <Download size={16} aria-hidden /> Instalar app
     </a>
   );

@@ -2,9 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { BIBLE_BOOKS } from "@/data/bible/books";
 import { EMOTION_PAGES } from "@/data/emotionPages";
 import { READING_PLANS } from "@/data/readingPlans";
+import { STORIES } from "@/data/stories";
 
 /**
- * Las páginas dinámicas sólo existen para contenido real (libros y capítulos, planes, emociones). Con
+ * Las páginas dinámicas sólo existen para contenido real (libros y capítulos, planes, emociones, historias). Con
  * cacheComponents no se puede usar `dynamicParams = false`, así que aquí se valida la ruta y se responde un
  * 404 REAL (no una página «no encontrada» con estado 200, que Google trataría como contenido).
  */
@@ -21,6 +22,8 @@ function isValid(parts: string[]): boolean {
     }
     case "planes":
       return !b && (!a || READING_PLANS.some((p) => p.id === a));
+    case "historias":
+      return !!a && !b && STORIES.some((s) => s.id === a);
     case "versiculos":
       return !!a && !b && EMOTION_PAGES.some((e) => e.slug === a);
     default:
@@ -34,4 +37,4 @@ export function proxy(request: NextRequest) {
   return NextResponse.rewrite(new URL("/pagina-no-encontrada", request.url), { status: 404 });
 }
 
-export const config = { matcher: ["/biblia/:path+", "/planes/:path+", "/versiculos/:path+"] };
+export const config = { matcher: ["/biblia/:path+", "/planes/:path+", "/versiculos/:path+", "/historias/:path+"] };

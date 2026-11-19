@@ -1,4 +1,5 @@
 import { getBrowserSupabaseClient } from "@/services/supabaseClient";
+import { clearStoredUtm, readStoredUtm } from "@/services/utm";
 
 export type UsageEvent = "open" | "install" | "read";
 
@@ -39,6 +40,7 @@ export function setStatsEnabled(enabled: boolean): void {
     // Al desactivar se olvida el identificador del dispositivo.
     writeStorage(DEVICE_KEY, null);
     writeStorage(DAY_KEY, null);
+    clearStoredUtm();
   }
   listeners.forEach((l) => l());
 }
@@ -92,12 +94,18 @@ export function trackEvent(event: UsageEvent, path: string | null): void {
     writeStorage(DAY_KEY, today);
   }
 
+  const stored = readStoredUtm();
+  const utm = stored
+    ? { utm_source: stored.source, utm_medium: stored.medium, utm_campaign: stored.campaign, utm_content: stored.content }
+    : null;
+
   void Promise.resolve(
     client.from("app_events").insert({
       device_id: deviceId,
       event,
       path: path ? path.slice(0, 120) : null,
       standalone: isStandalone(),
+      ...(utm ?? {}),
     })
   ).catch(() => {});
 }

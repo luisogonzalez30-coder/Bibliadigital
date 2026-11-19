@@ -25,6 +25,8 @@ export interface AdminOverview {
   installs_by_day: { day: string; installs: number }[];
   retention: { day: number; base: number; returned: number }[];
   top_paths: { path: string; views: number }[];
+  /** Ausente si sólo se aplicó la migración 02 (sin 03_utm). */
+  sources?: { source: string; campaign: string; content: string; devices: number; installs: number; reads: number }[];
   users: AdminUser[];
 }
 

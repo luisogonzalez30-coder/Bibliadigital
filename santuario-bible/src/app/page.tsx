@@ -381,6 +381,7 @@ export default function LandingPage() {
               <a key={l.href} href={l.href} className="block text-sanct-muted hover:text-sanct-text">{l.label}</a>
             ))}
             <Link href="/planes" className="block text-sanct-muted hover:text-sanct-text">Planes de lectura</Link>
+            <Link href="/historias" className="block text-sanct-muted hover:text-sanct-text">Historias en 1 minuto</Link>
             <Link href="/versiculos/ansiedad" className="block text-sanct-muted hover:text-sanct-text">Versículos para la ansiedad</Link>
             <Link href="/versiculos/duelo" className="block text-sanct-muted hover:text-sanct-text">Versículos de consuelo</Link>
             <Link href="/santuario" className="block text-sanct-muted hover:text-sanct-text">Entrar al Santuario</Link>
