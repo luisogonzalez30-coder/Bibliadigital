@@ -17,6 +17,7 @@ import { Umbral } from "@/components/Umbral";
 import { VoluntaryOfferingModal } from "@/components/VoluntaryOfferingModal";
 import { DeuterocanonNotice } from "@/components/DeuterocanonNotice";
 import { StreakPanel } from "@/components/StreakPanel";
+import { StatsToggle } from "@/components/StatsToggle";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { TraditionSelector } from "@/components/TraditionSelector";
 import { VerseCard } from "@/components/VerseCard";
@@ -434,6 +435,7 @@ export default function Home() {
         />
         <DailyReminder />
         <ToggleSwitch label="Modo noche" checked={state.darkMode} onChange={(darkMode) => update({ darkMode })} />
+        <StatsToggle />
         <CloudSyncPanel email={cloudEmail} onSendMagicLink={signInWithMagicLink} onSignOut={signOutCloudUser} />
       </SettingsSheet>
 
