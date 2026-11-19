@@ -10,6 +10,7 @@ import {
   formatOfferingAmount,
   getOfferingLabel,
   isOfferingConfigured,
+  offeringUrlCarriesAmount,
   loadOfferingPrefs,
   parseOfferingAmount,
   saveOfferingPrefs,
@@ -38,6 +39,8 @@ export function VoluntaryOfferingModal({ onClose }: VoluntaryOfferingModalProps)
   const [selection, setSelection] = useState<Selection>(initialSelection);
   const dialogRef = useRef<HTMLDivElement>(null);
   const configured = isOfferingConfigured();
+  // Enlace de monto libre: el monto se escribe al pagar; los de la app son sólo una referencia.
+  const freeAmount = configured && !offeringUrlCarriesAmount();
 
   const amount = selection.chosen === "custom" ? parseOfferingAmount(selection.custom) : selection.chosen;
   const url = amount !== null ? buildOfferingUrl(amount) : null;
@@ -125,21 +128,26 @@ export function VoluntaryOfferingModal({ onClose }: VoluntaryOfferingModalProps)
               );
             })}
           </div>
-          <label className="block">
-            <span className="sr-only">Otro monto en pesos chilenos</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="off"
-              value={selection.custom}
-              onFocus={() => setSelection((s) => ({ ...s, chosen: "custom" }))}
-              onChange={(e) => changeCustom(e.target.value)}
-              placeholder="Otro monto (CLP)"
-              aria-invalid={selection.chosen === "custom" && selection.custom !== "" && amount === null}
-              className="w-full rounded-2xl border border-sanct-border bg-transparent px-4 py-3 text-center text-sm tabular-nums text-sanct-text placeholder:text-sanct-muted focus:border-sanct-accent/60 focus:outline-none"
-            />
-          </label>
-          {selection.chosen === "custom" && selection.custom !== "" && amount === null && (
+          {freeAmount && (
+            <p className="text-center text-xs text-sanct-muted">Montos de referencia: elegirás o escribirás el monto al pagar.</p>
+          )}
+          {!freeAmount && (
+            <label className="block">
+              <span className="sr-only">Otro monto en pesos chilenos</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                value={selection.custom}
+                onFocus={() => setSelection((s) => ({ ...s, chosen: "custom" }))}
+                onChange={(e) => changeCustom(e.target.value)}
+                placeholder="Otro monto (CLP)"
+                aria-invalid={selection.chosen === "custom" && selection.custom !== "" && amount === null}
+                className="w-full rounded-2xl border border-sanct-border bg-transparent px-4 py-3 text-center text-sm tabular-nums text-sanct-text placeholder:text-sanct-muted focus:border-sanct-accent/60 focus:outline-none"
+              />
+            </label>
+          )}
+          {!freeAmount && selection.chosen === "custom" && selection.custom !== "" && amount === null && (
             <p role="status" className="text-center text-xs text-sanct-muted">
               Escribe un monto entero desde {formatOfferingAmount(MIN_OFFERING_AMOUNT)}.
             </p>
@@ -155,7 +163,7 @@ export function VoluntaryOfferingModal({ onClose }: VoluntaryOfferingModalProps)
               onClick={() => amount !== null && saveOfferingPrefs({ amount })}
               className="block rounded-full bg-sanct-accent px-6 py-3.5 text-center text-sm font-medium text-sanct-bg transition hover:opacity-90"
             >
-              {getOfferingLabel()} · {amount !== null ? formatOfferingAmount(amount) : ""}
+              {freeAmount ? getOfferingLabel() : `${getOfferingLabel()} · ${amount !== null ? formatOfferingAmount(amount) : ""}`}
             </a>
           ) : (
             <button
