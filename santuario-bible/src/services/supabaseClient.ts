@@ -17,15 +17,20 @@ export function getBrowserSupabaseClient(): SupabaseClient | null {
   }
 
   if (!browserClient) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+    const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL as string).trim();
+    const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string).trim();
 
-    browserClient = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    });
+    try {
+      browserClient = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      });
+    } catch {
+      // Configuración inválida: la app sigue en modo local en vez de fallar.
+      return null;
+    }
   }
 
   return browserClient;
