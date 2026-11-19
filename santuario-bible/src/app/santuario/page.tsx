@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, BookOpen, Heart, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, BookOpen, HandHeart, Heart, SlidersHorizontal } from "lucide-react";
 import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
+import { FaithCompanionsModal } from "@/components/FaithCompanionsModal";
 import { OfferingInvite } from "@/components/OfferingInvite";
 import { PostalStudioModal } from "@/components/PostalStudioModal";
 import { ProblemAdvisor } from "@/components/ProblemAdvisor";
@@ -18,6 +19,7 @@ import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { TraditionSelector } from "@/components/TraditionSelector";
 import { VerseCard } from "@/components/VerseCard";
 import { CANONICAL_VERSES } from "@/data/canonicalSeed";
+import type { FaithCompanion } from "@/data/faithCompanions";
 import {
   isOfferingConfigured,
   loadOfferingPrefs,
@@ -87,6 +89,9 @@ export default function Home() {
   const cloudReadyRef = useRef(false);
   const [postalVerse, setPostalVerse] = useState<CanonicalVerse | null>(null);
   const [view, setView] = useState<View>("umbral");
+  const [companionsOpen, setCompanionsOpen] = useState(false);
+  const [focus, setFocus] = useState<{ verse: CanonicalVerse; companion: FaithCompanion } | null>(null);
+  const focusRef = useRef<HTMLElement>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [offeringOpen, setOfferingOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -176,6 +181,22 @@ export default function Home() {
     () => (verified && today ? (getDailyStoriesVerses(state.tradition, today, verified)[0] ?? null) : null),
     [verified, today, state.tradition],
   );
+
+  const openCompanions = useCallback(() => setCompanionsOpen(true), []);
+  const closeCompanions = useCallback(() => setCompanionsOpen(false), []);
+  // "Leer en el Santuario": destaca el pasaje en la vista principal y cierra el modal.
+  const handleReadCompanion = useCallback((verse: CanonicalVerse, companion: FaithCompanion) => {
+    setFocus({ verse, companion });
+    setView("santuario");
+    setCompanionsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!focus) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    focusRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    focusRef.current?.focus({ preventScroll: true });
+  }, [focus]);
 
   const closeSettings = useCallback(() => setSettingsOpen(false), []);
 
@@ -282,9 +303,32 @@ export default function Home() {
           onStories={() => setStoriesOpen(true)}
           onEnter={() => setView("santuario")}
           onPostal={setPostalVerse}
+          onCompanions={openCompanions}
         />
       ) : (
         <div className="space-y-14 py-10">
+          {focus && (
+            <section ref={focusRef} tabIndex={-1} aria-label="Pasaje destacado" className="scroll-mt-24 space-y-4 outline-none">
+              <div className="flex items-center justify-between gap-4">
+                <h2 className="text-xs uppercase tracking-widest text-sanct-accent">Pasaje destacado · {focus.companion.name}</h2>
+                <button type="button" onClick={() => setFocus(null)} className="text-xs text-sanct-muted underline underline-offset-4">
+                  Quitar
+                </button>
+              </div>
+              <VerseCard
+                verse={focus.verse}
+                showParallelEnglish={state.showParallelEnglish}
+                bookmarked={state.bookmarkedVerseIds.includes(focus.verse.id)}
+                onToggleBookmark={handleToggleBookmark}
+                onCreatePostal={setPostalVerse}
+              />
+              <p className="text-sm leading-relaxed text-sanct-muted">
+                <span className="text-sanct-accent">Para tu oración: </span>
+                {focus.companion.prayerPrompt}
+              </p>
+            </section>
+          )}
+
           <StreakPanel
             activeStreak={activeStreak}
             longestStreak={state.longestStreak}
@@ -299,6 +343,18 @@ export default function Home() {
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-sanct-accent px-5 py-3.5 text-sm font-medium text-sanct-bg disabled:opacity-50"
           >
             <BookOpen size={16} aria-hidden /> Lectura diaria · 2 min
+          </button>
+
+          <button
+            type="button"
+            onClick={openCompanions}
+            className="flex w-full items-center gap-4 rounded-3xl border border-sanct-border p-6 text-left transition hover:bg-sanct-surface"
+          >
+            <HandHeart size={26} strokeWidth={1.4} aria-hidden className="shrink-0 text-sanct-accent" />
+            <span>
+              <span className="scripture block text-xl">Compañeros de Fe</span>
+              <span className="block text-sm text-sanct-muted">Figuras de fe, cada una con un pasaje real de la Escritura y una guía para tu oración.</span>
+            </span>
           </button>
 
           {verified !== null && (
@@ -364,6 +420,18 @@ export default function Home() {
           showParallelEnglish={state.showParallelEnglish}
           onClose={() => setStoriesOpen(false)}
           onComplete={handleCompleteReading}
+        />
+      )}
+
+      {companionsOpen && verified !== null && (
+        <FaithCompanionsModal
+          tradition={state.tradition}
+          verifiedVerses={verified}
+          showParallelEnglish={state.showParallelEnglish}
+          suspendEscape={postalVerse !== null}
+          onClose={closeCompanions}
+          onReadInSanctuary={handleReadCompanion}
+          onCreatePostal={setPostalVerse}
         />
       )}
 

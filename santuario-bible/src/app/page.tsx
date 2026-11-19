@@ -4,6 +4,7 @@ import {
   BookOpen,
   Compass,
   Flame,
+  HandHeart,
   HeartHandshake,
   ImageIcon,
   Languages,
@@ -50,8 +51,10 @@ const STEPS = [
 ];
 
 const FEATURES = [
+  { icon: HandHeart, title: "Compañeros de Fe", body: "Figuras de fe unidas a un pasaje real y a una guía para tu oración. Sin palabras atribuidas." },
   { icon: Compass, title: "Brújula del Alma", body: "Elige cómo te sientes y recibe un pasaje en un solo toque." },
   { icon: ImageIcon, title: "Postales 9:16", body: "Convierte un versículo en una imagen lista para compartir." },
+  { icon: BookOpen, title: "Describe tu problema", body: "Escribe o dicta lo que vives y recibe un versículo real con una reflexión rotulada como tal." },
   { icon: Languages, title: "Espejo bilingüe", body: "Lee en español y, si quieres, con la traducción en inglés al lado." },
   { icon: Flame, title: "Racha de Luz", body: "Un hábito sereno, sin presión: cada día que lees, tu luz sigue encendida." },
   { icon: Volume2, title: "Sonido ambiental", body: "Un tono suave y opcional, creado en tu dispositivo. Silencioso por defecto." },
@@ -215,7 +218,7 @@ export default function LandingPage() {
               </li>
             ))}
           </ol>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {FEATURES.map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex gap-4 rounded-2xl bg-sanct-surface p-6">
                 <Icon size={22} strokeWidth={1.5} aria-hidden className="mt-0.5 shrink-0 text-sanct-accent" />
