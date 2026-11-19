@@ -31,10 +31,13 @@ Opciones: `--out <carpeta>` y `--fps <n>`. Requiere `playwright` (con Chromium) 
 ```bash
 node video/render.mjs david --voice                         # voz es-CL-LorenzoNeural (masculina, Chile) → david-voz.mp4
 node video/render.mjs david --voice --voice-name es-CL-CatalinaNeural   # voz femenina
-node video/render.mjs david --voice --rate -8%              # más pausada (por defecto -3%)
+node video/render.mjs david --voice --rate -8%              # más pausada (por defecto, velocidad normal de la voz)
 ```
-- Lee **exactamente el mismo texto** que los subtítulos (una llamada de Azure Voz por frase). La línea de tiempo se ajusta a
-  la duración real de cada frase y la voz se mezcla con el colchón ambiental, normalizada a -16 LUFS.
+- Lee el mismo texto que los subtítulos, **una llamada de Azure Voz por versículo completo** (entonación natural). Las páginas de
+  subtítulos se sincronizan con las pausas reales de la voz y la línea de tiempo sigue a la voz; se mezcla con el colchón ambiental
+  y se normaliza a -16 LUFS.
+- **Ortografía para la voz:** la RV1909 usa tildes antiguas («á», «é», «fué», «dió»…). Solo para la pronunciación se leen como «a»,
+  «e», «fue», «dio»; los subtítulos siguen literales.
 - Las frases se cachean en `out/.tts/`: volver a renderizar no vuelve a llamar a Azure.
 - Costo: ~600–700 caracteres por video. La capa gratuita de Azure Voz neuronal incluye 500.000 caracteres al mes
   (cientos de videos); fuera de ella, la tarifa pública ronda los USD 16 por millón de caracteres (≈ USD 0,01 por video).
