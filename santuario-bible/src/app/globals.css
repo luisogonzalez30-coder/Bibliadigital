@@ -2,25 +2,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Modo Santuario · Día (Pergamino) */
+/* Identidad Santuario Bíblico · Día (Pergamino) */
 :root {
   --sanct-bg: #faf6f0;
   --sanct-surface: #f3ece1;
   --sanct-text: #1c1917;
   --sanct-text-muted: #57534e;
-  --sanct-accent: #d97706;
-  --sanct-border: rgb(28 25 23 / 0.09);
+  /* Bronce: 4,7:1 sobre el pergamino (texto pequeño) y 4,7:1 con texto crema encima. */
+  --sanct-accent: #86672d;
+  --sanct-border: rgb(28 25 23 / 0.1);
+  --sanct-gold-gradient: linear-gradient(135deg, #6f5420 0%, #8a6a2f 55%, #7a5c24 100%);
+  --sanct-bg-glow: radial-gradient(120% 80% at 50% 0%, #fffaf2 0%, var(--sanct-bg) 60%);
   color-scheme: light;
 }
 
-/* Modo Santuario · Noche (Santuario Oscuro) */
+/* Identidad Santuario Bíblico · Noche (carbón cálido #1C1917 con oro) */
 .dark {
-  --sanct-bg: #0c0a09;
-  --sanct-surface: #1c1917;
-  --sanct-text: #f5f5f4;
-  --sanct-text-muted: #a8a29e;
-  --sanct-accent: #f59e0b;
-  --sanct-border: rgb(245 245 244 / 0.09);
+  --sanct-bg: #1c1917;
+  --sanct-surface: #26211d;
+  --sanct-text: #f5efe6;
+  --sanct-text-muted: #b8ada0;
+  --sanct-accent: #d4b06a;
+  --sanct-border: rgb(245 239 230 / 0.1);
+  --sanct-gold-gradient: linear-gradient(135deg, #c9a25b 0%, #e8cf98 50%, #d4b06a 100%);
+  --sanct-bg-glow: radial-gradient(120% 80% at 50% 0%, #2c2621 0%, var(--sanct-bg) 62%);
   color-scheme: dark;
 }
 
@@ -41,9 +46,27 @@ html {
 
 body {
   background: var(--sanct-bg);
+  background-image: var(--sanct-bg-glow);
+  background-attachment: fixed;
   color: var(--sanct-text);
   font-family: var(--font-inter), system-ui, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Todo fondo de acento (botones, interruptores) lleva el degradado dorado de la marca. */
+.bg-sanct-accent {
+  background-image: var(--sanct-gold-gradient);
+}
+
+/* Letras doradas de la marca (títulos y nombre): degradado bronce → oro claro → bronce. */
+.gold-text {
+  background-image: linear-gradient(135deg, #8f6b34 0%, #e7cc92 42%, #b88a44 68%, #8f6b34 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .gold-text {
+  background-image: linear-gradient(135deg, #c9a25b 0%, #f1dcaa 45%, #d4b06a 70%, #b8924a 100%);
 }
 
 /* Escrituras: serif editorial */

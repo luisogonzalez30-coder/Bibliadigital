@@ -3,7 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { PwaRegistrar } from "@/components/PwaRegistrar";
 import { UsageTracker } from "@/components/UsageTracker";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -20,8 +20,15 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Santuario Bíblico · Biblia",
+  title: "Santuario Bíblico · Palabra diaria",
   description: "Lectura diaria de las Escrituras, íntegra y verificada.",
+  openGraph: {
+    siteName: SITE_NAME,
+    locale: "es_CL",
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Santuario Bíblico · Palabra diaria" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Santuario" },
   icons: { apple: "/icons/apple-touch-icon.png" },
 };
@@ -29,7 +36,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FAF6F0" },
-    { media: "(prefers-color-scheme: dark)", color: "#0C0A09" },
+    { media: "(prefers-color-scheme: dark)", color: "#1C1917" },
   ],
 };
 
