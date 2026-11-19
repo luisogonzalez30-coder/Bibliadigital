@@ -39,6 +39,15 @@ export function isOfferingConfigured(): boolean {
   return getUrlTemplate() !== null;
 }
 
+/**
+ * true si la URL incluye {amount}: sólo entonces el monto elegido en la app viaja al medio de pago.
+ * Con un enlace de monto libre (sin {amount}) la persona escribe el monto al pagar y los montos de la app son una guía.
+ */
+export function offeringUrlCarriesAmount(): boolean {
+  const template = getUrlTemplate();
+  return template !== null && template.includes(AMOUNT_TOKEN);
+}
+
 /** Texto del botón principal: NEXT_PUBLIC_OFFERING_LABEL o "Aportar". */
 export function getOfferingLabel(): string {
   const label = process.env.NEXT_PUBLIC_OFFERING_LABEL?.trim();
