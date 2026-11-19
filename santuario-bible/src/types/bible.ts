@@ -59,6 +59,14 @@ export interface UserSanctuaryState {
   longestStreak: number;
   lastReadDate: string | null; // Formato YYYY-MM-DD
   bookmarkedVerseIds: string[];
+  /** true una vez completada la bienvenida (fe, nombre y necesidad). Se guarda solo en el dispositivo. */
+  onboarded?: boolean;
+  /** Religión o creencia elegida en la bienvenida (id de FAITH_CHOICES). Solo en el dispositivo; la tradición (canon) es la que filtra el contenido. */
+  faithId?: string;
+  /** Nombre con el que la app saluda. Solo en el dispositivo; nunca se envía a la nube. */
+  displayName?: string;
+  /** Lo que la persona dijo que la trae hoy (Brújula del Alma); null si solo quiere leer. */
+  focusEmotion?: EmotionSlug | null;
 }
 
 /**

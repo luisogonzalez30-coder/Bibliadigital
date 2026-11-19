@@ -3,7 +3,7 @@ import type { CanonicalVerse, EmotionSlug, TraditionMetadata } from '@/types/bib
 export const TRADITIONS_METADATA: readonly TraditionMetadata[] = [
   { slug: 'catholic', labelEs: 'Católica', labelEn: 'Catholic', bookCount: 73, descriptionEs: 'Canon Católico con Deuterocanónicos' },
   { slug: 'protestant', labelEs: 'Protestante / Evangélica', labelEn: 'Protestant / Evangelical', bookCount: 66, descriptionEs: 'Canon Evangélico / Protestante' },
-  { slug: 'torah', labelEs: 'Torá / Tanaj', labelEn: 'Torah / Tanakh', bookCount: 24, descriptionEs: 'Pentateuco y Tanaj Hebreo' },
+  { slug: 'torah', labelEs: 'Judía (Torá / Tanaj)', labelEn: 'Torah / Tanakh', bookCount: 24, descriptionEs: 'Pentateuco y Tanaj Hebreo' },
   { slug: 'universal', labelEs: 'Universal', labelEn: 'Universal', bookCount: 73, descriptionEs: 'Canon Ecuménico Universal' },
 ];
 
