@@ -6,6 +6,7 @@ import {
   UserSanctuaryState,
 } from '@/types/bible';
 import { CANONICAL_VERSES } from '@/data/canonicalSeed';
+import { isFaithId } from '@/data/onboarding';
 
 const STORAGE_KEY = 'santuario_user_state_v1';
 
@@ -37,6 +38,7 @@ function sanitizeLoadedState(raw: Partial<UserSanctuaryState>): UserSanctuarySta
     ...merged,
     tradition: TRADITION_SLUGS.includes(merged.tradition) ? merged.tradition : DEFAULT_USER_STATE.tradition,
     onboarded: merged.onboarded === true,
+    faithId: isFaithId(merged.faithId) ? merged.faithId : undefined,
     displayName: sanitizeDisplayName(merged.displayName),
     focusEmotion: EMOTION_SLUGS.includes(merged.focusEmotion as EmotionSlug) ? (merged.focusEmotion as EmotionSlug) : null,
   };

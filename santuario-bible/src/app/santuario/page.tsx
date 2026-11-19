@@ -24,6 +24,7 @@ import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { TraditionSelector } from "@/components/TraditionSelector";
 import { VerseCard } from "@/components/VerseCard";
 import { CANONICAL_VERSES, TRADITIONS_METADATA } from "@/data/canonicalSeed";
+import { faithDisplayLabel } from "@/data/onboarding";
 import type { FaithCompanion } from "@/data/faithCompanions";
 import {
   isOfferingConfigured,
@@ -245,7 +246,8 @@ export default function Home() {
 
   const handleTraditionChange = useCallback(
     (tradition: TraditionSlug) => {
-      const next = { ...state, tradition };
+      // Al cambiar el canon a mano, la etiqueta de fe guardada deja de aplicar: se muestra el nombre del canon.
+      const next = { ...state, tradition, faithId: undefined };
       setState(next);
       triggerCloudSyncIfReady(next);
     },
@@ -276,7 +278,7 @@ export default function Home() {
     return (
       <main className="w-full">
         <Onboarding
-          initial={{ tradition: state.tradition, displayName: state.displayName ?? "", focusEmotion: state.focusEmotion ?? null }}
+          initial={{ tradition: state.tradition, faithId: state.faithId, displayName: state.displayName ?? "", focusEmotion: state.focusEmotion ?? null }}
           verified={verified}
           today={today}
           onFinish={handleOnboardingFinish}
@@ -285,7 +287,7 @@ export default function Home() {
     );
   }
 
-  const traditionLabel = TRADITIONS_METADATA.find((t) => t.slug === state.tradition)?.labelEs;
+  const traditionLabel = faithDisplayLabel(state.faithId, TRADITIONS_METADATA.find((t) => t.slug === state.tradition)?.labelEs ?? "");
 
   return (
     <main className={`mx-auto w-full max-w-3xl px-6 py-6${mounted ? "" : " invisible"}`}>

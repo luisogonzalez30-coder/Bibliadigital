@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { TRADITIONS_METADATA } from "@/data/canonicalSeed";
-import { FAITH_CHOICES, NEED_CHOICES, faithChoiceForTradition } from "@/data/onboarding";
+import { FAITH_CHOICES, FAITH_GROUPS, NEED_CHOICES, faithDisplayLabel, initialFaithId } from "@/data/onboarding";
 import { getWelcomeVerse, sanitizeDisplayName } from "@/services/sanctuaryEngine";
 import type { CanonicalVerse, EmotionSlug, TraditionSlug } from "@/types/bible";
 
 export interface OnboardingResult {
   tradition: TraditionSlug;
+  faithId: string;
   displayName: string;
   focusEmotion: EmotionSlug | null;
 }
 
 interface OnboardingProps {
   /** Valores ya guardados (para preseleccionar si la persona vuelve a ver la bienvenida). */
-  initial: { tradition: TraditionSlug; displayName: string; focusEmotion: EmotionSlug | null };
+  initial: { tradition: TraditionSlug; faithId: string | undefined; displayName: string; focusEmotion: EmotionSlug | null };
   /** Catálogo verificado (null mientras se verifica). */
   verified: readonly CanonicalVerse[] | null;
   today: string | null;
@@ -29,7 +30,7 @@ const TITLES = ["¿Con qué fe quieres leer?", "¿Cómo te llamas?", "¿Qué te 
 /** Bienvenida de primera vez: fe → nombre → necesidad → primer versículo ya filtrado. Todo queda en el dispositivo. */
 export function Onboarding({ initial, verified, today, onFinish }: OnboardingProps) {
   const [step, setStep] = useState<Step>(0);
-  const [faithId, setFaithId] = useState<string | null>(() => faithChoiceForTradition(initial.tradition));
+  const [faithId, setFaithId] = useState<string | null>(() => initialFaithId(initial.faithId, initial.tradition));
   const [name, setName] = useState(initial.displayName);
   const [needId, setNeedId] = useState<string | null>(() => (initial.focusEmotion ? (NEED_CHOICES.find((n) => n.emotion === initial.focusEmotion)?.id ?? null) : null));
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -39,11 +40,10 @@ export function Onboarding({ initial, verified, today, onFinish }: OnboardingPro
   const tradition: TraditionSlug = faith?.tradition ?? "universal";
   const cleanName = sanitizeDisplayName(name);
 
-  const verse = useMemo(
-    () => (step === 3 && verified && today ? getWelcomeVerse(tradition, need?.emotion ?? null, today, verified) : null),
-    [step, verified, today, tradition, need],
-  );
-  const traditionLabel = TRADITIONS_METADATA.find((t) => t.slug === tradition)?.labelEs ?? "Universal";
+  const needEmotion = need?.emotion ?? null;
+  // Cálculo barato y determinista: lo memoiza el compilador de React.
+  const verse = step === 3 && verified && today ? getWelcomeVerse(tradition, needEmotion, today, verified) : null;
+  const traditionLabel = faithDisplayLabel(faith?.id, TRADITIONS_METADATA.find((t) => t.slug === tradition)?.labelEs ?? "Universal");
 
   useEffect(() => {
     titleRef.current?.focus({ preventScroll: true });
@@ -51,7 +51,7 @@ export function Onboarding({ initial, verified, today, onFinish }: OnboardingPro
 
   const next = () => setStep((s) => (s < 3 ? ((s + 1) as Step) : s));
   const back = () => setStep((s) => (s > 0 ? ((s - 1) as Step) : s));
-  const finish = () => onFinish({ tradition, displayName: cleanName, focusEmotion: need?.emotion ?? null });
+  const finish = () => onFinish({ tradition, faithId: faith?.id ?? "buscando", displayName: cleanName, focusEmotion: need?.emotion ?? null });
 
   return (
     <section aria-label="Bienvenida" className="mx-auto flex min-h-[100dvh] w-full max-w-xl flex-col px-6 py-8">
@@ -77,28 +77,32 @@ export function Onboarding({ initial, verified, today, onFinish }: OnboardingPro
               <h1 ref={titleRef} tabIndex={-1} className="scripture text-4xl leading-tight outline-none">{TITLES[0]}</h1>
               <p className="leading-relaxed text-sanct-muted">Así te mostramos desde el primer momento los textos de tu tradición. Puedes cambiarla cuando quieras en Ajustes.</p>
             </header>
-            <fieldset className="space-y-3">
-              <legend className="sr-only">Tu fe</legend>
-              {FAITH_CHOICES.map((c) => {
-                const active = c.id === faithId;
-                return (
-                  <button
-                    key={c.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => setFaithId(c.id)}
-                    className={`flex w-full items-start justify-between gap-3 rounded-2xl border px-5 py-4 text-left transition ${active ? "border-sanct-accent/70 bg-sanct-surface" : "border-sanct-border hover:bg-sanct-surface"}`}
-                  >
-                    <span>
-                      <span className="block font-medium">{c.label}</span>
-                      <span className="block text-sm text-sanct-muted">{c.hint}</span>
-                    </span>
-                    {active && <Check size={18} aria-hidden className="mt-0.5 shrink-0 text-sanct-accent" />}
-                  </button>
-                );
-              })}
-            </fieldset>
+            <div className="space-y-7" role="radiogroup" aria-label="Tu fe">
+              {FAITH_GROUPS.map((g) => (
+                <fieldset key={g.id} className="space-y-3">
+                  <legend className="mb-1 text-xs uppercase tracking-widest text-sanct-muted">{g.title}</legend>
+                  {FAITH_CHOICES.filter((c) => c.group === g.id).map((c) => {
+                    const active = c.id === faithId;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setFaithId(c.id)}
+                        className={`flex w-full items-start justify-between gap-3 rounded-2xl border px-5 py-4 text-left transition ${active ? "border-sanct-accent/70 bg-sanct-surface" : "border-sanct-border hover:bg-sanct-surface"}`}
+                      >
+                        <span>
+                          <span className="block font-medium">{c.label}</span>
+                          <span className="block text-sm text-sanct-muted">{c.hint}</span>
+                        </span>
+                        {active && <Check size={18} aria-hidden className="mt-0.5 shrink-0 text-sanct-accent" />}
+                      </button>
+                    );
+                  })}
+                </fieldset>
+              ))}
+            </div>
           </>
         )}
 
@@ -162,6 +166,11 @@ export function Onboarding({ initial, verified, today, onFinish }: OnboardingPro
                 Tradición: <span className="text-sanct-text">{traditionLabel}</span> · Puedes cambiarla en Ajustes.
               </p>
             </header>
+            {faith?.note && (
+              <p role="note" className="rounded-2xl border border-sanct-border px-4 py-3 text-sm leading-relaxed text-sanct-muted">
+                {faith.note}
+              </p>
+            )}
             <figure className="space-y-4 rounded-3xl border border-sanct-border bg-sanct-surface p-7">
               {verse ? (
                 <>
