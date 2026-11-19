@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Santuario · Lectura Bíblica Diaria",
     short_name: "Santuario",
     description: "Lectura diaria de las Escrituras, íntegra y verificada.",
-    start_url: "/",
+    start_url: "/santuario",
     scope: "/",
     display: "standalone",
     background_color: "#FAF6F0",

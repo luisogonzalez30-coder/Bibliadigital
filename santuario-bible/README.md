@@ -16,6 +16,14 @@ MVP web instalable (PWA) de lectura bíblica diaria, minimalista y verificada. N
 
 **Estado conocido:** el catálogo tiene 9 pasajes. Los deuterocanónicos (Torres Amat) están pendientes de una fuente verificable y la app lo avisa a quien elige `catholic` o `universal`.
 
+## Rutas
+
+| Ruta | Qué es |
+|---|---|
+| `/` | Página de presentación (landing): camino, escrituras, verificador de huella SHA-256, compromiso y preguntas frecuentes |
+| `/santuario` | La app (umbral, lectura diaria, Brújula, «Describe tu problema», postales). Es la `start_url` de la PWA |
+| `/privacidad` | Qué guarda la app y dónde |
+
 ## Desarrollo local
 
 ```bash

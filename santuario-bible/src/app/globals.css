@@ -35,6 +35,10 @@
   --font-serif: var(--font-playfair), Georgia, serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--sanct-bg);
   color: var(--sanct-text);
@@ -106,4 +110,25 @@ body {
   }
   .halo { opacity: 0.85; }
   body { transition: none; }
+}
+
+/* ───────────── Página de presentación ───────────── */
+
+/* Rosetón de luz: giro muy lento. */
+.rose-spin {
+  animation: rose-spin 160s linear infinite;
+}
+@keyframes rose-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Separador ornamental: línea dorada con un destello central. */
+.ornament {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--sanct-accent) 55%, transparent), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rose-spin { animation: none; }
 }
