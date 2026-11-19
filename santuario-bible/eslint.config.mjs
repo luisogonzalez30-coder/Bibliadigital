@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Herramientas de video (scripts de navegador y render), fuera de la app.
+    "video/**",
   ]),
 ]);
 
