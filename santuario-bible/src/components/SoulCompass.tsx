@@ -32,7 +32,7 @@ export function SoulCompass({
   const results = emotion ? getVersesByEmotion(tradition, emotion, verifiedVerses) : [];
 
   return (
-    <section aria-labelledby="compass-title" className="space-y-4">
+    <section aria-labelledby="compass-title" className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 id="compass-title" className="text-xs uppercase tracking-widest text-sanct-muted">
           Brújula del Alma · ¿Cómo estás hoy?
@@ -48,7 +48,7 @@ export function SoulCompass({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
         {EMOTIONS_METADATA.map((e) => {
           const Icon = ICONS[e.icon] ?? Lamp;
           const active = e.slug === emotion;
@@ -58,13 +58,13 @@ export function SoulCompass({
               type="button"
               aria-pressed={active}
               onClick={() => setEmotion(active ? null : e.slug)}
-              className={`flex flex-col items-center gap-1 rounded-xl border px-3 py-4 text-sm transition ${
+              className={`flex flex-col items-center gap-2 rounded-2xl border px-3 py-5 text-sm transition ${
                 active
-                  ? "border-sanct-accent bg-sanct-surface text-sanct-accent"
-                  : "border-transparent bg-sanct-surface/60 hover:bg-sanct-surface"
+                  ? "border-sanct-accent/60 bg-sanct-surface text-sanct-accent"
+                  : "border-sanct-border bg-transparent text-sanct-muted hover:bg-sanct-surface hover:text-sanct-text"
               }`}
             >
-              <Icon size={20} aria-hidden />
+              <Icon size={20} strokeWidth={1.5} aria-hidden />
               {e.labelEs}
             </button>
           );
@@ -72,8 +72,8 @@ export function SoulCompass({
       </div>
 
       {selected && (
-        <div aria-live="polite" className="space-y-4">
-          <p className="text-sm text-sanct-muted">{selected.subtitleEs}</p>
+        <div aria-live="polite" className="space-y-6">
+          <p className="text-center text-sm italic text-sanct-muted">{selected.subtitleEs}</p>
           {results.length > 0 ? (
             results.map((v) => (
               <VerseCard
@@ -86,7 +86,7 @@ export function SoulCompass({
               />
             ))
           ) : (
-            <p className="rounded-xl border border-sanct-muted/30 px-4 py-3 text-sm text-sanct-muted">
+            <p className="rounded-2xl border border-sanct-border px-5 py-4 text-sm text-sanct-muted">
               Aún no hay pasajes cargados para esta combinación de tradición y emoción en el catálogo local.
             </p>
           )}

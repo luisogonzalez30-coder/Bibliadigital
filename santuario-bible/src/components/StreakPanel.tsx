@@ -9,7 +9,7 @@ interface StreakPanelProps {
 
 export function StreakPanel({ activeStreak, longestStreak, readToday, onMarkRead }: StreakPanelProps) {
   return (
-    <section aria-labelledby="streak-title" className="rounded-2xl bg-sanct-surface p-5">
+    <section aria-labelledby="streak-title" className="rounded-3xl border border-sanct-border p-6">
       <h2 id="streak-title" className="mb-4 text-xs uppercase tracking-widest text-sanct-muted">
         Racha de Luz
       </h2>

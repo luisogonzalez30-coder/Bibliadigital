@@ -22,10 +22,10 @@ export function TraditionSelector({ value, onChange }: TraditionSelectorProps) {
               type="button"
               aria-pressed={active}
               onClick={() => onChange(t.slug)}
-              className={`flex items-start justify-between gap-2 rounded-xl border px-4 py-3 text-left transition ${
+              className={`flex items-start justify-between gap-2 rounded-2xl border px-4 py-3 text-left transition ${
                 active
-                  ? "border-sanct-accent bg-sanct-surface"
-                  : "border-transparent bg-sanct-surface/60 hover:bg-sanct-surface"
+                  ? "border-sanct-accent/60 bg-sanct-surface"
+                  : "border-sanct-border bg-transparent hover:bg-sanct-surface"
               }`}
             >
               <span>
