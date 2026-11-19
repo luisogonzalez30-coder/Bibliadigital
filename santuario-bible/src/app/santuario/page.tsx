@@ -8,7 +8,9 @@ import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyReminder } from "@/components/DailyReminder";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
 import { FaithCompanionsModal } from "@/components/FaithCompanionsModal";
+import { NameField } from "@/components/NameField";
 import { OfferingInvite } from "@/components/OfferingInvite";
+import { Onboarding, type OnboardingResult } from "@/components/Onboarding";
 import { PostalStudioModal } from "@/components/PostalStudioModal";
 import { ProblemAdvisor } from "@/components/ProblemAdvisor";
 import { SettingsSheet } from "@/components/SettingsSheet";
@@ -21,7 +23,7 @@ import { StatsToggle } from "@/components/StatsToggle";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { TraditionSelector } from "@/components/TraditionSelector";
 import { VerseCard } from "@/components/VerseCard";
-import { CANONICAL_VERSES } from "@/data/canonicalSeed";
+import { CANONICAL_VERSES, TRADITIONS_METADATA } from "@/data/canonicalSeed";
 import type { FaithCompanion } from "@/data/faithCompanions";
 import {
   isOfferingConfigured,
@@ -250,6 +252,16 @@ export default function Home() {
     [state],
   );
 
+  const handleOnboardingFinish = useCallback(
+    (result: OnboardingResult) => {
+      const next: UserSanctuaryState = { ...state, ...result, onboarded: true };
+      setState(next);
+      setView("umbral");
+      triggerCloudSyncIfReady(next);
+    },
+    [state],
+  );
+
   const showDeuteroNotice =
     (state.tradition === "catholic" || state.tradition === "universal") &&
     PENDING_DEUTERO_BOOKS.some((osis) => !verses.some((v) => v.bookOsis === osis));
@@ -259,8 +271,24 @@ export default function Home() {
 
   const deuteroNotice = showDeuteroNotice ? <DeuterocanonNotice /> : null;
 
+  // Primera vez (o «ver la bienvenida otra vez»): se pregunta fe, nombre y necesidad antes de mostrar nada.
+  if (mounted && state.onboarded !== true) {
+    return (
+      <main className="w-full">
+        <Onboarding
+          initial={{ tradition: state.tradition, displayName: state.displayName ?? "", focusEmotion: state.focusEmotion ?? null }}
+          verified={verified}
+          today={today}
+          onFinish={handleOnboardingFinish}
+        />
+      </main>
+    );
+  }
+
+  const traditionLabel = TRADITIONS_METADATA.find((t) => t.slug === state.tradition)?.labelEs;
+
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-6">
+    <main className={`mx-auto w-full max-w-3xl px-6 py-6${mounted ? "" : " invisible"}`}>
       <header className="relative z-20 flex items-center justify-between">
         {view === "santuario" ? (
           <button
@@ -307,6 +335,9 @@ export default function Home() {
           onEnter={() => setView("santuario")}
           onPostal={setPostalVerse}
           onCompanions={openCompanions}
+          name={state.displayName}
+          traditionLabel={traditionLabel}
+          onChangeTradition={() => setSettingsOpen(true)}
         />
       ) : (
         <div className="space-y-14 py-10">
@@ -426,6 +457,7 @@ export default function Home() {
       )}
 
       <SettingsSheet open={settingsOpen} onClose={closeSettings}>
+        <NameField value={state.displayName ?? ""} onCommit={(displayName) => update({ displayName })} />
         <TraditionSelector value={state.tradition} onChange={handleTraditionChange} />
         {deuteroNotice}
         <ToggleSwitch
@@ -436,6 +468,16 @@ export default function Home() {
         <DailyReminder />
         <ToggleSwitch label="Modo noche" checked={state.darkMode} onChange={(darkMode) => update({ darkMode })} />
         <StatsToggle />
+        <button
+          type="button"
+          onClick={() => {
+            setSettingsOpen(false);
+            update({ onboarded: false });
+          }}
+          className="w-full rounded-2xl border border-sanct-border px-4 py-3 text-left text-sm text-sanct-muted transition hover:bg-sanct-surface hover:text-sanct-text"
+        >
+          Ver la bienvenida otra vez (fe, nombre y lo que te trae)
+        </button>
         <CloudSyncPanel email={cloudEmail} onSendMagicLink={signInWithMagicLink} onSignOut={signOutCloudUser} />
       </SettingsSheet>
 

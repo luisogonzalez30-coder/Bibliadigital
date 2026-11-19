@@ -17,7 +17,47 @@ export const DEFAULT_USER_STATE: UserSanctuaryState = {
   longestStreak: 0,
   lastReadDate: null,
   bookmarkedVerseIds: [],
+  onboarded: false,
+  displayName: '',
+  focusEmotion: null,
 };
+
+const TRADITION_SLUGS: readonly TraditionSlug[] = ['catholic', 'protestant', 'torah', 'universal'];
+const EMOTION_SLUGS: readonly EmotionSlug[] = ['ansiedad', 'gratitud', 'duelo', 'cansancio', 'sabiduria'];
+
+/** Nombre para el saludo: sin espacios sobrantes ni saltos de línea, máximo 40 caracteres. */
+export function sanitizeDisplayName(value: unknown): string {
+  return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+}
+
+/** Normaliza lo leído del almacenamiento: nada inválido llega a la interfaz. */
+function sanitizeLoadedState(raw: Partial<UserSanctuaryState>): UserSanctuaryState {
+  const merged = { ...DEFAULT_USER_STATE, ...raw };
+  return {
+    ...merged,
+    tradition: TRADITION_SLUGS.includes(merged.tradition) ? merged.tradition : DEFAULT_USER_STATE.tradition,
+    onboarded: merged.onboarded === true,
+    displayName: sanitizeDisplayName(merged.displayName),
+    focusEmotion: EMOTION_SLUGS.includes(merged.focusEmotion as EmotionSlug) ? (merged.focusEmotion as EmotionSlug) : null,
+  };
+}
+
+/**
+ * Primer versículo de la bienvenida: de la tradición elegida y, si la persona dijo qué la trae, de esa emoción
+ * (elegido de forma determinista por fecha). Si esa combinación no tiene pasajes, cae al versículo del día de la tradición.
+ */
+export function getWelcomeVerse(
+  tradition: TraditionSlug,
+  emotion: EmotionSlug | null,
+  isoDate: string,
+  source: readonly CanonicalVerse[] = CANONICAL_VERSES
+): CanonicalVerse | null {
+  if (emotion) {
+    const byEmotion = getVersesByEmotion(tradition, emotion, source);
+    if (byEmotion.length > 0) return byEmotion[hashString(`${isoDate}|${emotion}`) % byEmotion.length];
+  }
+  return getDailyStoriesVerses(tradition, isoDate, source)[0] ?? null;
+}
 
 /**
  * Filtra el catálogo de versículos respetando estrictamente la tradición religiosa activa.
@@ -200,7 +240,7 @@ export function loadUserState(): UserSanctuaryState {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_USER_STATE;
-    return { ...DEFAULT_USER_STATE, ...(JSON.parse(raw) as Partial<UserSanctuaryState>) };
+    return sanitizeLoadedState(JSON.parse(raw) as Partial<UserSanctuaryState>);
   } catch {
     return DEFAULT_USER_STATE;
   }

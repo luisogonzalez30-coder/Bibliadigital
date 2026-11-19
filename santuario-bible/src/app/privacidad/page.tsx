@@ -21,6 +21,13 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
     ],
   },
   {
+    title: "Tu fe y tu nombre",
+    body: [
+      "Al abrir la app te preguntamos con qué fe quieres leer, cómo te llamas y qué te trae hoy, solo para mostrarte los textos de tu tradición y saludarte. Son datos sensibles y por eso se guardan únicamente en tu dispositivo: no los enviamos a ningún servidor ni forman parte de las estadísticas anónimas.",
+      "Si inicias sesión con tu correo, tu tradición se respalda junto a tu racha y tus favoritos; tu nombre y lo que elegiste que te trae hoy no. Puedes cambiar o repetir estas respuestas en Ajustes.",
+    ],
+  },
+  {
     title: "Qué se guarda en tu dispositivo",
     body: [
       "Tu tradición, el idioma espejo, el modo día o noche, tu Racha de Luz, tus versículos favoritos y, si haces un aporte, el último monto que elegiste. Se guarda en el almacenamiento local de tu navegador y puedes borrarlo en cualquier momento desde los ajustes del sitio de tu navegador.",

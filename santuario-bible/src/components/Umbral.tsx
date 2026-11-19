@@ -14,6 +14,11 @@ interface UmbralProps {
   onEnter: () => void;
   onPostal: (verse: CanonicalVerse) => void;
   onCompanions: () => void;
+  /** Nombre para el saludo (opcional). */
+  name?: string;
+  /** Tradición activa, visible desde el primer momento; «Cambiar» abre los Ajustes. */
+  traditionLabel?: string;
+  onChangeTradition?: () => void;
 }
 
 /** Vista de altar: halo de luz, saludo, racha y un único versículo del día. */
@@ -28,6 +33,9 @@ export function Umbral({
   onEnter,
   onPostal,
   onCompanions,
+  name,
+  traditionLabel,
+  onChangeTradition,
 }: UmbralProps) {
   return (
     <section aria-label="El Umbral Sagrado" className="relative flex min-h-[calc(100dvh-5rem)] flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-4 text-center">
@@ -35,8 +43,21 @@ export function Umbral({
 
       <div className="relative z-10 flex w-full max-w-2xl flex-col items-center gap-10">
         <header className="fade-in fade-in-1 space-y-2">
-          <p className="text-sm uppercase tracking-[0.3em] text-sanct-muted">{greeting ?? " "}</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-sanct-muted">{greeting ? `${greeting}${name ? `, ${name}` : ""}` : " "}</p>
           <p className="text-sm text-sanct-muted">{dateLabel ?? " "}</p>
+          {traditionLabel && (
+            <p className="text-sm text-sanct-muted">
+              Tu tradición: <span className="text-sanct-text">{traditionLabel}</span>
+              {onChangeTradition && (
+                <>
+                  {" · "}
+                  <button type="button" onClick={onChangeTradition} className="underline underline-offset-4 transition hover:text-sanct-text">
+                    Cambiar
+                  </button>
+                </>
+              )}
+            </p>
+          )}
         </header>
 
         <p
