@@ -29,7 +29,7 @@ const fps = Number(opt("fps", 30));
 const audioOnly = args.includes("--audio-only");
 const useVoice = args.includes("--voice");
 const voiceName = opt("voice-name", "es-CL-LorenzoNeural");
-const voiceRate = opt("rate", "-3%");
+const voiceRate = opt("rate", "0%");
 const stills = opt("stills", "")
   .split(",")
   .filter(Boolean)
@@ -75,6 +75,23 @@ const total = await page.evaluate(async (s) => window.__video.ready(window.STORI
 console.log(`Duración: ${total.toFixed(1)} s · ${Math.round(total * fps)} fotogramas`);
 console.log(JSON.stringify(await page.evaluate(() => window.__video.info())));
 
+/** Ortografía de 1909 → pronunciación actual, SOLO para la voz (los subtítulos siguen literales).
+ * Las letras sueltas «á», «é», «ó» y formas como «fué» se leían mal («a con acento»). */
+const MONO = { fué: "fue", dió: "dio", vió: "vio", fuí: "fui", dí: "di", fiés: "fies" };
+function speechText(text) {
+  const L = "(?<![\\p{L}])";
+  const R = "(?![\\p{L}])";
+  let t = text
+    .replace(new RegExp(`${L}á${R}`, "gu"), "a")
+    .replace(new RegExp(`${L}Á${R}`, "gu"), "A")
+    .replace(new RegExp(`${L}é${R}`, "gu"), "e")
+    .replace(new RegExp(`${L}ó${R}`, "gu"), "o");
+  for (const [k, v] of Object.entries(MONO)) {
+    t = t.replace(new RegExp(`${L}${k}${R}`, "giu"), (m) => (m[0] === m[0].toUpperCase() ? v[0].toUpperCase() + v.slice(1) : v));
+  }
+  return t;
+}
+
 /** Narración con Azure Voz (neuronal): una llamada por página de subtítulos; se cachea por texto+voz+velocidad. */
 async function synth(text) {
   const key = createHash("sha1").update(`${voiceName}|${voiceRate}|${text}`).digest("hex").slice(0, 16);
@@ -83,7 +100,7 @@ async function synth(text) {
   mkdirSync(path.dirname(file), { recursive: true });
   const esc = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const lang = voiceName.split("-").slice(0, 2).join("-");
-  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${lang}"><voice name="${voiceName}"><prosody rate="${voiceRate}">${esc}</prosody></voice></speak>`;
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${lang}"><voice name="${voiceName}">${voiceRate && voiceRate !== "0%" ? `<prosody rate="${voiceRate}">${esc}</prosody>` : esc}</voice></speak>`;
   // curl respeta HTTPS_PROXY y las credenciales del entorno (fetch de Node no); reintenta si el servicio limita la tasa (429)
   let code = "";
   for (let attempt = 1; attempt <= 6; attempt++) {
@@ -108,18 +125,64 @@ const mp3Duration = (f) => Number(spawnSync("ffprobe", ["-v", "error", "-show_en
 
 let voiceClips = null;
 let totalFinal = total;
+
+/** Pausas naturales (silencios) dentro de un audio, con el inicio y el fin del habla. */
+function speechMap(file, dur) {
+  const r = spawnSync("ffmpeg", ["-hide_banner", "-i", file, "-af", "silencedetect=noise=-34dB:d=0.12", "-f", "null", "-"]);
+  const err = r.stderr.toString();
+  const starts = [...err.matchAll(/silence_start: ([\d.]+)/g)].map((m) => Number(m[1]));
+  const ends = [...err.matchAll(/silence_end: ([\d.]+)/g)].map((m) => Number(m[1]));
+  let lead = 0;
+  let tail = dur;
+  const pauses = [];
+  starts.forEach((st, i) => {
+    const en = ends[i] ?? dur;
+    if (st < 0.05) lead = en;
+    else if (en >= dur - 0.05) tail = st;
+    else pauses.push((st + en) / 2);
+  });
+  return { lead, tail: Math.max(tail, lead + 0.5), pauses };
+}
+
 if (useVoice) {
   const pages = await page.evaluate(() => window.__video.pagesText());
-  const files = [];
+  // una llamada por VERSÍCULO completo (entonación natural); las páginas de subtítulos se sincronizan con sus pausas
+  const verses = [];
+  pages.forEach((p, i) => {
+    const last = verses[verses.length - 1];
+    if (last && last.ref === p.ref) last.idx.push(i);
+    else verses.push({ ref: p.ref, idx: [i] });
+  });
+  const durs = new Array(pages.length).fill(0);
+  const clips = [];
   let chars = 0;
-  for (const p of pages) {
-    files.push(await synth(p.text));
-    chars += p.text.length;
+  for (const v of verses) {
+    const spoken = speechText(v.idx.map((i) => pages[i].text).join(" "));
+    chars += spoken.length;
+    const file = await synth(spoken);
+    const dur = mp3Duration(file);
+    const { lead, tail, pauses } = speechMap(file, dur);
+    // límites de página: proporcionales a los caracteres y ajustados a la pausa natural más cercana
+    const lens = v.idx.map((i) => pages[i].text.length);
+    const sum = lens.reduce((x, y) => x + y, 0);
+    const bounds = [0];
+    let acc = 0;
+    for (let k = 0; k < v.idx.length - 1; k++) {
+      acc += lens[k];
+      const est = lead + (acc / sum) * (tail - lead);
+      const near = pauses.reduce((best, p) => (Math.abs(p - est) < Math.abs(best - est) ? p : best), est);
+      bounds.push(Math.abs(near - est) <= 0.7 ? near : est);
+    }
+    bounds.push(dur + 0.25);
+    v.idx.forEach((pi, k) => {
+      durs[pi] = Math.max(0.5, bounds[k + 1] - bounds[k] - 0.1);
+    });
+    clips.push({ file, firstPage: v.idx[0] });
   }
-  const { total: t2, starts } = await page.evaluate((d) => window.__video.retime(d), files.map(mp3Duration));
+  const { total: t2, starts } = await page.evaluate((d) => window.__video.retime(d), durs);
   totalFinal = t2;
-  voiceClips = files.map((f, i) => ({ f, at: starts[i] }));
-  console.log(`Voz ${voiceName}: ${pages.length} frases, ${chars} caracteres · duración final ${t2.toFixed(1)} s`);
+  voiceClips = clips.map((c) => ({ f: c.file, at: starts[c.firstPage] }));
+  console.log(`Voz ${voiceName}: ${verses.length} versículos, ${chars} caracteres · duración final ${t2.toFixed(1)} s`);
 }
 
 if (stills.length) {
