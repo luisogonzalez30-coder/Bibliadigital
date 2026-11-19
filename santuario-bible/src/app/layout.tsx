@@ -20,7 +20,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Santuario · Biblia",
+  title: "Santuario Bíblico · Biblia",
   description: "Lectura diaria de las Escrituras, íntegra y verificada.",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Santuario" },
   icons: { apple: "/icons/apple-touch-icon.png" },

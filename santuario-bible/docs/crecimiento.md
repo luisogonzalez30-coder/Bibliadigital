@@ -1,4 +1,4 @@
-# Crecimiento y monetización · Santuario
+# Crecimiento y monetización · Santuario Bíblico
 
 > Documento de trabajo. Los precios de dominio se consultaron el 19-nov-2026 y están en dólares; verifícalos antes de comprar.
 
@@ -10,7 +10,7 @@
 5. **Monetización:** aporte voluntario ahora; suscripción solo cuando haya tráfico.
 
 ## Dominio
-El dominio actual (`smartassistusa.online`) no habla de fe ni de Santuario. Candidatos libres, ordenados por mi preferencia:
+El dominio actual (`smartassistusa.online`) no habla de fe ni de Santuario Bíblico. Candidatos libres, ordenados por mi preferencia:
 
 | Dominio | Primer año | Renovación | Comentario |
 |---|---|---|---|
@@ -32,7 +32,7 @@ No disponibles: `santuario.com`, `.app`, `.cl`, `.org`, `.online`, `.one`.
 |---|---|---|
 | Ahora | Aporte voluntario (Mercado Pago, monto libre) | Ya activo |
 | Con ~5.000 usuarios activos al mes | «Amigos del Santuario»: suscripción baja con planes extra, audio narrado y plantillas de postal. La Escritura siempre gratis. | Tráfico y retención medidos |
-| Después | Santuario para comunidades (parroquias, grupos, colegios) | Primeros usuarios que lo pidan |
+| Después | Santuario Bíblico para comunidades (parroquias, grupos, colegios) | Primeros usuarios que lo pidan |
 
 Escenario de ingresos con suscripción de $2.990 CLP/mes (antes de comisiones; los porcentajes de conversión son supuestos):
 

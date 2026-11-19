@@ -99,7 +99,7 @@ export function VoluntaryOfferingModal({ onClose }: VoluntaryOfferingModalProps)
             Aporte voluntario
           </h2>
           <p className="leading-relaxed text-sanct-muted">
-            La lectura diaria, la Brújula del Alma y las postales de Santuario son y seguirán siendo libres para todos.
+            La lectura diaria, la Brújula del Alma y las postales de Santuario Bíblico son y seguirán siendo libres para todos.
           </p>
           <p className="leading-relaxed text-sanct-muted">
             Si esta compañía te hace bien, tu aporte voluntario ayuda a mantener la plataforma viva y a sumar más pasajes

@@ -327,7 +327,7 @@
     // marca discreta
     const brand = grp(layers.ui);
     const bt = el("text", { x: 540, y: 120, "text-anchor": "middle", fill: GOLD, "font-family": "Inter, sans-serif", "font-size": 30, "letter-spacing": 8, "font-weight": 600 }, brand);
-    bt.textContent = "SANTUARIO";
+    bt.textContent = "SANTUARIO BÍBLICO";
     layers.brand = brand;
   }
 
@@ -368,8 +368,9 @@
     endG.__a = mk(800, story.next.kicker.toUpperCase(), 34, GOLD, "Inter, sans-serif", 600, 8);
     endG.__b = story.next.title.split("\n").map((ln, i) => mk(920 + i * 100, ln, 84, PARCH, '"Playfair Display", serif'));
     const base = 920 + story.next.title.split("\n").length * 100 + 40;
-    endG.__c = mk(base + 60, "Lee la historia completa en Santuario", 40, "#e8dfcf", "Inter, sans-serif", 500);
+    endG.__c = mk(base + 60, "Lee la historia completa en Santuario Bíblico", 40, "#e8dfcf", "Inter, sans-serif", 500);
     endG.__d = mk(base + 120, "Link en la bio", 40, GOLD, "Inter, sans-serif", 600, 2);
+    endG.__h = mk(base + 190, "@santuariobiblico", 44, "#f3d98b", "Inter, sans-serif", 600, 1);
     endG.__e = mk(1640, "Biblia Reina-Valera 1909 · texto íntegro y verificado", 28, "#a99f8d", "Inter, sans-serif", 400);
   }
 
@@ -442,7 +443,7 @@
       const a = ease(seg(lt, 0, 0.6));
       endG.setAttribute("opacity", a);
       endG.__stars(t);
-      [endG.__a, ...endG.__b, endG.__c, endG.__d, endG.__e].forEach((n, i) => n.setAttribute("opacity", ease(seg(lt, 0.3 + i * 0.25, 0.9 + i * 0.25))));
+      [endG.__a, ...endG.__b, endG.__c, endG.__d, endG.__h, endG.__e].forEach((n, i) => n.setAttribute("opacity", ease(seg(lt, 0.3 + i * 0.25, 0.9 + i * 0.25))));
     } else {
       const g = it.ctl.g;
       const inA = ease(seg(lt, 0, 0.55));

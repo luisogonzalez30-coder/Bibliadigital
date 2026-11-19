@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ emocion: 
   const page = getEmotionPage(emocion);
   if (!page) return {};
   return {
-    title: `${page.title} | Santuario`,
+    title: `${page.title} | Santuario Bíblico`,
     description: page.description,
     alternates: { canonical: `/versiculos/${page.slug}` },
   };
@@ -77,7 +77,7 @@ export default async function EmotionVersesPage({ params }: { params: Promise<{ 
         <section className="space-y-4 rounded-3xl border border-sanct-border p-7">
           <h2 className="scripture text-2xl">Lleva esto a tu día</h2>
           <p className="leading-relaxed text-sanct-muted">
-            En Santuario puedes recibir un versículo cada día, escribir lo que vives y convertir un pasaje en una postal para compartir.
+            En Santuario Bíblico puedes recibir un versículo cada día, escribir lo que vives y convertir un pasaje en una postal para compartir.
           </p>
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href="/santuario" className="rounded-full bg-sanct-accent px-6 py-3 font-medium text-sanct-bg transition hover:opacity-90">

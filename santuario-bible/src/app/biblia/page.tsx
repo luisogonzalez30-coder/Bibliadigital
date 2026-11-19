@@ -5,7 +5,7 @@ import { BibleHeader } from "@/components/bible/BibleHeader";
 import { BIBLE_BOOKS, BIBLE_VERSION_EN, BIBLE_VERSION_ES } from "@/data/bible/books";
 
 export const metadata: Metadata = {
-  title: "La Biblia completa · Reina-Valera 1909 | Santuario",
+  title: "La Biblia completa · Reina-Valera 1909 | Santuario Bíblico",
   description:
     "Lee los 66 libros de la Biblia en la Reina-Valera 1909, con la King James Version opcional. Texto literal y verificable con huella SHA-256, y búsqueda por palabra.",
   alternates: { canonical: "/biblia" },

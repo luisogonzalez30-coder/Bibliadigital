@@ -11,7 +11,7 @@ export function OfferingInvite({ onAccept, onDismiss }: OfferingInviteProps) {
       className="fade-in fixed inset-x-4 bottom-4 z-30 mx-auto flex max-w-md flex-col gap-3 rounded-3xl border border-sanct-border bg-sanct-bg p-5 text-center shadow-lg"
     >
       <p className="leading-relaxed">
-        Tu luz de hoy está encendida. Si esta lectura te acompañó, puedes ayudar a mantener Santuario.
+        Tu luz de hoy está encendida. Si esta lectura te acompañó, puedes ayudar a mantener Santuario Bíblico.
       </p>
       <div className="flex items-center justify-center gap-3">
         <button

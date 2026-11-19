@@ -4,7 +4,7 @@ import { BibleHeader } from "@/components/bible/BibleHeader";
 import { STORIES } from "@/data/stories";
 
 export const metadata: Metadata = {
-  title: "Historias bíblicas en 1 minuto | Santuario",
+  title: "Historias bíblicas en 1 minuto | Santuario Bíblico",
   description: "Historias de la Biblia con el texto literal de la Reina-Valera 1909: David y Goliat, José y sus hermanos, Daniel y los leones.",
   alternates: { canonical: "/historias" },
 };

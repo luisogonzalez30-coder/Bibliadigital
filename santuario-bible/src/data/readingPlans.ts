@@ -1,6 +1,6 @@
 /**
  * Planes de lectura de 7 días. Cada día es un capítulo REAL de la Biblia (enlazado a /biblia) con un enfoque
- * y una pregunta de reflexión escritos por Santuario: no son Escritura ni se atribuyen a nadie.
+ * y una pregunta de reflexión escritos por Santuario Bíblico: no son Escritura ni se atribuyen a nadie.
  */
 export interface PlanDay {
   readonly day: number;

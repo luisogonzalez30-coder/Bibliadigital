@@ -1,4 +1,4 @@
-# Videos SVG de Santuario
+# Videos SVG de Santuario Bíblico
 
 Videos verticales (1080×1920, 30 fps) de historias bíblicas, hechos con **SVG animado** y renderizados en local:
 **sin créditos ni servicios de pago**. Solo se necesitan Chromium (Playwright) y ffmpeg.
@@ -7,7 +7,7 @@ Videos verticales (1080×1920, 30 fps) de historias bíblicas, hechos con **SVG 
 - Todo el texto en pantalla es **versículo literal** de la Reina-Valera 1909, leído de `src/data/bible/*.json`.
   `render.mjs` falla si un versículo falta o está vacío; nunca se rellena ni se parafrasea.
 - Las ilustraciones son figuras planas **sin rostro**. Los personajes no dicen nada que no esté en el texto bíblico.
-- Los textos propios (título, «Mañana…», «Link en la bio») son claramente de Santuario y no se presentan como Escritura.
+- Los textos propios (título, «Mañana…», «Link en la bio») son claramente de Santuario Bíblico y no se presentan como Escritura.
 
 ## Uso
 ```bash

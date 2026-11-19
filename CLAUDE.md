@@ -1,5 +1,7 @@
 # CLAUDE.md — App Bíblica "Santuario"
 
+> **Nombre público: Santuario Bíblico** (Instagram: `@santuariobiblico`; «Santuario» queda como nombre corto —ícono de la app— y para la vista de la app, `/santuario`). Constantes en `src/lib/site.ts`.
+
 ## 1. Regla de Oro (Inmutabilidad Sagrada)
 - PROHIBIDO inventar, resumir, parafrasear o generar versículos bíblicos (con IA o a mano).
 - Todo texto bíblico se lee exclusivamente de un catálogo verificado, copiado literal de la edición indicada.

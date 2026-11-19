@@ -1,7 +1,9 @@
 # Textos para publicar (TikTok / Instagram Reels)
 
-> El texto de los videos es la Reina-Valera 1909 literal. Estas descripciones las escribió Santuario y no son Escritura.
+> El texto de los videos es la Reina-Valera 1909 literal. Estas descripciones las escribió Santuario Bíblico y no son Escritura.
 > Sustituye el dominio por el definitivo cuando lo tengas.
+
+> Cuenta de Instagram: **@santuariobiblico**. Link de la bio: `/ig` (ver `docs/instagram.md`).
 
 ## 1 · David y Goliat
 **Descripción:** Un pastor, una honda y una piedra. David y Goliat, leído tal como está escrito (1 Samuel 17, Reina-Valera 1909).

@@ -85,7 +85,7 @@ export function VerifyVerse({ verse }: { verse: CanonicalVerse }) {
         {result?.kind === "bad" && (
           <div className="space-y-1">
             <p className="flex items-center gap-2 font-medium text-sanct-text">
-              <ShieldAlert size={18} aria-hidden className="text-sanct-accent" /> Alterado: no coincide. Santuario descartaría este texto.
+              <ShieldAlert size={18} aria-hidden className="text-sanct-accent" /> Alterado: no coincide. Santuario Bíblico descartaría este texto.
             </p>
             <p className="break-all font-mono text-xs text-sanct-muted">{result.hash}</p>
           </div>

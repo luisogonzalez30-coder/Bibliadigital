@@ -104,7 +104,7 @@ export function FaithCompanionsModal({
               Compañeros de Fe y Oración
             </h2>
             <p className="text-sm text-sanct-muted">
-              Cada figura se une a un pasaje real de la Escritura. Santuario no pone palabras en boca de nadie.
+              Cada figura se une a un pasaje real de la Escritura. Santuario Bíblico no pone palabras en boca de nadie.
             </p>
           </div>
           <button type="button" onClick={onClose} aria-label="Cerrar" className="rounded-full p-2 text-sanct-muted hover:bg-sanct-surface">
