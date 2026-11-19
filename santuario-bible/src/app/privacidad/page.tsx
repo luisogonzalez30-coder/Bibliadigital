@@ -14,6 +14,13 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
     ],
   },
   {
+    title: "Estadísticas anónimas de uso",
+    body: [
+      "Para saber cuánta gente usa Santuario, la app registra tres eventos: abrir la app (una vez al día), instalarla y leer un capítulo. Cada evento lleva un código aleatorio generado en tu dispositivo, la ruta de la página y si la abriste como app instalada. No incluye tu nombre, tu correo, tu IP ni lo que escribes.",
+      "Puedes desactivarlo en Ajustes («Ayudar a mejorar Santuario») o con la opción «No rastrear» de tu navegador; al desactivarlo se borra ese código. Los eventos se guardan en Supabase.",
+    ],
+  },
+  {
     title: "Qué se guarda en tu dispositivo",
     body: [
       "Tu tradición, el idioma espejo, el modo día o noche, tu Racha de Luz, tus versículos favoritos y, si haces un aporte, el último monto que elegiste. Se guarda en el almacenamiento local de tu navegador y puedes borrarlo en cualquier momento desde los ajustes del sitio de tu navegador.",
@@ -23,7 +30,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Respaldo opcional con tu correo",
     body: [
-      "Si decides iniciar sesión con un enlace enviado a tu correo, guardamos en un servicio de base de datos (Supabase) tu correo, tu tradición, tu racha y tus favoritos, para que no los pierdas al cambiar de dispositivo. Es totalmente opcional.",
+      "Si decides iniciar sesión con un enlace enviado a tu correo, guardamos en un servicio de base de datos (Supabase) tu correo, tu tradición, tu racha y tus favoritos, para que no los pierdas al cambiar de dispositivo. Es totalmente opcional. Quien administra Santuario puede ver, en un panel protegido, el correo, la fecha de registro y la racha de las cuentas para entender cuánta gente lee cada día.",
       "Cerrar sesión no borra esos datos de la nube. Aún no hay un botón para eliminar tu cuenta desde la app; está pendiente en nuestra lista de trabajo.",
     ],
   },

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { PwaRegistrar } from "@/components/PwaRegistrar";
+import { UsageTracker } from "@/components/UsageTracker";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         {children}
         <PwaRegistrar />
+        <UsageTracker />
         <Analytics />
       </body>
     </html>
