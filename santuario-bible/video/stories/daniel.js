@@ -183,7 +183,7 @@
   });
 
   window.STORIES.daniel = {
-    kicker: "Historias en 60 segundos · 3 de 3",
+    kicker: "Historias en 1 minuto · 3 de 3",
     title: "Daniel y\nlos leones",
     subtitle: "Daniel 6",
     next: { kicker: "Esta semana", title: "Tu plan de\nlectura" },

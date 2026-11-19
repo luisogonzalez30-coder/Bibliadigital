@@ -234,7 +234,7 @@
   });
 
   window.STORIES.jose = {
-    kicker: "Historias en 60 segundos · 2 de 3",
+    kicker: "Historias en 1 minuto · 2 de 3",
     title: "José y sus\nhermanos",
     subtitle: "Génesis 37, 39, 45 y 50",
     next: { kicker: "Mañana", title: "Daniel y\nlos leones" },

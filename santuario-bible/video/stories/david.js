@@ -260,7 +260,7 @@
   });
 
   window.STORIES.david = {
-    kicker: "Historias en 60 segundos · 1 de 3",
+    kicker: "Historias en 1 minuto · 1 de 3",
     title: "David\ny Goliat",
     subtitle: "1 Samuel 17",
     next: { kicker: "Mañana", title: "José y sus\nhermanos" },

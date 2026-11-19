@@ -27,8 +27,22 @@ Opciones: `--out <carpeta>` y `--fps <n>`. Requiere `playwright` (con Chromium) 
 | `render.mjs` | Lee los versículos literales, captura cada fotograma con Chromium y los une con ffmpeg. |
 | `fonts/` | Playfair Display (SIL OFL) para que el render no dependa del sistema. |
 
-El audio es un colchón ambiental sintetizado con ffmpeg (sin derechos de terceros). Para TikTok/Instagram conviene
-publicar el video y **añadir allí un sonido en tendencia**.
+## Voz en off (Azure, casi gratis)
+```bash
+node video/render.mjs david --voice                         # voz es-CL-LorenzoNeural (masculina, Chile) → david-voz.mp4
+node video/render.mjs david --voice --voice-name es-CL-CatalinaNeural   # voz femenina
+node video/render.mjs david --voice --rate -8%              # más pausada (por defecto -3%)
+```
+- Lee **exactamente el mismo texto** que los subtítulos (una llamada de Azure Voz por frase). La línea de tiempo se ajusta a
+  la duración real de cada frase y la voz se mezcla con el colchón ambiental, normalizada a -16 LUFS.
+- Las frases se cachean en `out/.tts/`: volver a renderizar no vuelve a llamar a Azure.
+- Costo: ~600–700 caracteres por video. La capa gratuita de Azure Voz neuronal incluye 500.000 caracteres al mes
+  (cientos de videos); fuera de ella, la tarifa pública ronda los USD 16 por millón de caracteres (≈ USD 0,01 por video).
+  Verifica la tarifa vigente en tu cuenta de Azure.
+- En este entorno las credenciales las inyecta el proxy; fuera de él define `TTS_URL` y el acceso que corresponda.
+
+Sin `--voice`, el audio es solo un colchón ambiental sintetizado con ffmpeg (sin derechos de terceros). Para TikTok/Instagram
+conviene publicar y **añadir allí un sonido en tendencia** si el video va sin voz.
 
 ## Agregar una historia
 1. Crear `stories/<id>.js` con `window.STORIES.<id> = { kicker, title, subtitle, next, shots }`.

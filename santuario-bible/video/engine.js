@@ -267,7 +267,7 @@
       items.push({ kind, start: t, dur, ...extra });
       t += dur;
     };
-    push("title", 2.8, {});
+    push("title", 2.6, {});
     story.shots.forEach((shot, i) => {
       const verses = shot.verses.map((k) => ({ key: k, ...window.VERSES[k] }));
       const pages = [];
@@ -288,7 +288,7 @@
       });
       push("shot", dur, { shot, pages, index: i });
     });
-    push("end", 4.6, {});
+    push("end", 4.2, {});
     return { items, total: t };
   }
 
@@ -453,6 +453,32 @@
     }
   }
 
+  /* Re-ajusta la línea de tiempo a la duración real de la voz (segundos por página, en orden).
+   * Devuelve el inicio absoluto de cada página para colocar el audio. */
+  function retime(durs) {
+    let k = 0;
+    let t = 0;
+    const starts = [];
+    tl.items.forEach((it) => {
+      it.start = t;
+      if (it.kind === "shot") {
+        let pt = 0.4;
+        it.pages.forEach((p) => {
+          const d = durs[k++];
+          p.start = pt;
+          p.dur = d + 0.1;
+          starts.push(it.start + pt);
+          pt += p.dur;
+        });
+        it.dur = pt + 0.55;
+      }
+      t += it.dur;
+    });
+    tl.total = t;
+    window.__total = t;
+    return { total: t, starts };
+  }
+
   const H_ = { el, grp, gradient, sky, stars, orb, hills, groundLine, figure, lion, camel, angel, palm, rays, vignette, clip, bird, clamp, ease, easeOut, lerp, seg, rng, GOLD, PARCH, NIGHT, W, H };
 
   window.__video = {
@@ -464,6 +490,7 @@
       return tl.total;
     },
     setFrame,
+    retime,
     pagesText: () => tl.items.filter((i) => i.kind === "shot").flatMap((i) => i.pages.map((p) => ({ ref: p.ref, text: p.words.join(" ") }))),
     info: () => tl.items.map((i) => ({ kind: i.kind, start: +i.start.toFixed(2), dur: +i.dur.toFixed(2) })),
   };
