@@ -16,7 +16,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Estadísticas anónimas de uso",
     body: [
-      "Para saber cuánta gente usa Santuario, la app registra tres eventos: abrir la app (una vez al día), instalarla y leer un capítulo. Cada evento lleva un código aleatorio generado en tu dispositivo, la ruta de la página y si la abriste como app instalada. No incluye tu nombre, tu correo, tu IP ni lo que escribes.",
+      "Para saber cuánta gente usa Santuario, la app registra tres eventos: abrir la app (una vez al día), instalarla y leer un capítulo. Cada evento lleva un código aleatorio generado en tu dispositivo, la ruta de la página y si la abriste como app instalada. Si llegaste desde un enlace con etiquetas de campaña (por ejemplo, de qué video vienes), esa etiqueta se guarda en tu dispositivo y viaja con esos eventos. No incluye tu nombre, tu correo, tu IP ni lo que escribes.",
       "Puedes desactivarlo en Ajustes («Ayudar a mejorar Santuario») o con la opción «No rastrear» de tu navegador; al desactivarlo se borra ese código. Los eventos se guardan en Supabase.",
     ],
   },
