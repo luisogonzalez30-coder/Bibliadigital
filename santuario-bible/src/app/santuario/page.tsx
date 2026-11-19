@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, BookOpen, HandHeart, Heart, SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, BookOpen, HandHeart, Heart, Library, SlidersHorizontal } from "lucide-react";
 import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
@@ -356,6 +357,17 @@ export default function Home() {
               <span className="block text-sm text-sanct-muted">Figuras de fe, cada una con un pasaje real de la Escritura y una guía para tu oración.</span>
             </span>
           </button>
+
+          <Link
+            href="/biblia"
+            className="flex w-full items-center gap-4 rounded-3xl border border-sanct-border p-6 text-left transition hover:bg-sanct-surface"
+          >
+            <Library size={26} strokeWidth={1.4} aria-hidden className="shrink-0 text-sanct-accent" />
+            <span>
+              <span className="scripture block text-xl">La Biblia completa</span>
+              <span className="block text-sm text-sanct-muted">Los 66 libros, con búsqueda y verificación por capítulo.</span>
+            </span>
+          </Link>
 
           {verified !== null && (
             <ProblemAdvisor

@@ -11,7 +11,6 @@ import {
   Lock,
   ShieldCheck,
   Smartphone,
-  Volume2,
   WifiOff,
 } from "lucide-react";
 import { InstallAppButton } from "@/components/landing/InstallAppButton";
@@ -31,6 +30,7 @@ export const metadata: Metadata = {
 
 const NAV = [
   { href: "#camino", label: "Nuestro camino" },
+  { href: "/biblia", label: "La Biblia" },
   { href: "#escrituras", label: "Escrituras" },
   { href: "#verifica", label: "Verifica" },
   { href: "#preguntas", label: "Preguntas" },
@@ -57,7 +57,7 @@ const FEATURES = [
   { icon: BookOpen, title: "Describe tu problema", body: "Escribe o dicta lo que vives y recibe un versículo real con una reflexión rotulada como tal." },
   { icon: Languages, title: "Espejo bilingüe", body: "Lee en español y, si quieres, con la traducción en inglés al lado." },
   { icon: Flame, title: "Racha de Luz", body: "Un hábito sereno, sin presión: cada día que lees, tu luz sigue encendida." },
-  { icon: Volume2, title: "Sonido ambiental", body: "Un tono suave y opcional, creado en tu dispositivo. Silencioso por defecto." },
+  { icon: BookOpen, title: "Biblia completa", body: "Los 66 libros, con búsqueda y verificación por capítulo, en la Reina-Valera 1909 y la KJV." },
   { icon: WifiOff, title: "Sin internet", body: "Instálala y léela donde estés; tu lectura no depende de la conexión." },
 ];
 
@@ -79,8 +79,8 @@ const FAQ: ReadonlyArray<{ q: string; a: string }> = [
   { q: "¿Reemplaza a mi sacerdote, pastor o a un profesional de salud?", a: "No. Santuario ofrece compañía y orientación general. Para decisiones importantes o momentos difíciles, busca a tu guía espiritual o a un profesional." },
   { q: "¿Funciona sin internet?", a: "Sí, una vez abierta o instalada como app. El dictado por voz es la excepción: depende del servicio de tu navegador." },
   {
-    q: "¿Por qué hay pocos pasajes?",
-    a: `El catálogo es nuevo (hoy ${CANONICAL_VERSES.length} pasajes) y crece solo con textos que podemos verificar. Los deuterocanónicos en un español católico se sumarán cuando contemos con una fuente verificable.`,
+    q: "¿Está la Biblia completa?",
+    a: `Sí: los 66 libros, en la Reina-Valera 1909 y la King James, con búsqueda y verificación por capítulo en la sección «La Biblia». Los pasajes que usa la Brújula y el versículo del día (hoy ${CANONICAL_VERSES.length}) los elegimos a mano. Los deuterocanónicos se sumarán cuando contemos con una edición en español verificable.`,
   },
 ];
 
@@ -189,7 +189,7 @@ export default function LandingPage() {
             {[
               [String(TRADITIONS_METADATA.length), "tradiciones"],
               [String(EMOTIONS_METADATA.length), "emociones en la Brújula"],
-              ["2 min", "de lectura diaria"],
+              ["66", "libros de la Biblia"],
               ["0", "cuentas obligatorias"],
             ].map(([value, label]) => (
               <div key={label} className="space-y-1">

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { PwaRegistrar } from "@/components/PwaRegistrar";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -16,6 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Santuario · Biblia",
   description: "Lectura diaria de las Escrituras, íntegra y verificada.",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Santuario" },
