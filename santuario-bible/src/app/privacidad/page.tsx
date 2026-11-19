@@ -35,6 +35,12 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
     ],
   },
   {
+    title: "Búsqueda en la Biblia",
+    body: [
+      "Para encontrar resultados, la palabra o frase que buscas se envía a nuestro servidor, que responde y no la guarda. Leer los capítulos no requiere enviar nada.",
+    ],
+  },
+  {
     title: "Aporte voluntario",
     body: [
       "El botón de aporte te lleva a un medio de pago externo en una pestaña nueva. Santuario no procesa pagos ni ve ni guarda datos de tu tarjeta.",

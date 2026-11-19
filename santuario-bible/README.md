@@ -15,7 +15,7 @@ MVP web instalable (PWA) de lectura bíblica diaria, minimalista y verificada. N
 
 > **Regla de Oro:** no se inventa, resume ni parafrasea ningún versículo. Todo texto sale de `src/data/canonicalSeed.ts` (RV1909 / KJV) y se valida por SHA-256 antes de mostrarse.
 
-**Estado conocido:** el catálogo tiene 14 pasajes verificados. Los deuterocanónicos (Torres Amat) están pendientes de una fuente verificable y la app lo avisa a quien elige `catholic` o `universal`.
+**Estado conocido:** el catálogo curado (Brújula, versículo del día) tiene 14 pasajes y la Biblia completa está en `/biblia` (31.102 versículos). Los deuterocanónicos (Torres Amat) están pendientes de una fuente verificable y la app lo avisa a quien elige `catholic` o `universal`.
 
 ## Rutas
 
@@ -23,6 +23,7 @@ MVP web instalable (PWA) de lectura bíblica diaria, minimalista y verificada. N
 |---|---|
 | `/` | Página de presentación (landing): camino, escrituras, verificador de huella SHA-256, compromiso y preguntas frecuentes |
 | `/santuario` | La app (umbral, lectura diaria, Brújula, «Describe tu problema», postales). Es la `start_url` de la PWA |
+| `/biblia` | La Biblia completa (66 libros, RV1909 + KJV): un capítulo por página, búsqueda y verificación SHA-256 por capítulo. Los datos se generan con `scripts/build-bible.mjs` |
 | `/privacidad` | Qué guarda la app y dónde |
 
 ## Desarrollo local

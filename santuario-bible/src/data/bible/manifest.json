@@ -1,0 +1,291 @@
+{
+ "source": "scrollmapper/bible_databases · SpaRV (Reina-Valera 1909) + KJV",
+ "totalVerses": 31102,
+ "emptyInSpanishEdition": [
+  "NUM 12:16",
+  "NUM 29:40",
+  "1SA 23:29",
+  "2SA 20:26",
+  "2CH 33:25",
+  "JOB 35:16",
+  "JOB 38:39",
+  "JOB 38:40",
+  "JOB 38:41",
+  "JOB 40:20",
+  "JOB 40:21",
+  "JOB 40:22",
+  "JOB 40:23",
+  "JOB 40:24",
+  "HOS 11:12",
+  "JON 1:17",
+  "ACT 19:41",
+  "2CO 13:14"
+ ],
+ "emptyInEnglishEdition": [],
+ "books": {
+  "GEN": {
+   "verses": 1533,
+   "sha256": "079c1dd550f04b760546544bd789ab22a7213d07009932a902909e54e4d438c5"
+  },
+  "EXO": {
+   "verses": 1213,
+   "sha256": "954f36480d5c36d94c7dae9a47d4547ce6059fbef55abb484a46c224c93946d5"
+  },
+  "LEV": {
+   "verses": 859,
+   "sha256": "7e05b4a2a3fb1f4e53005b74b14e7dc68946240e1cee687393ffc0aef9d5f196"
+  },
+  "NUM": {
+   "verses": 1288,
+   "sha256": "0f5b1a8ee4cd2c303443a8d72637d523247624e408b418913ec2a890b83bea8a"
+  },
+  "DEU": {
+   "verses": 959,
+   "sha256": "80bf36f81fb1b38bb9bbe6924eaead158e7068afdd54345fa6a9595323c6dd75"
+  },
+  "JOS": {
+   "verses": 658,
+   "sha256": "b2e5f3c79bad89e4a4faf317e5e3dcf186b0a6993383b188777fb7d52c5ad1e5"
+  },
+  "JDG": {
+   "verses": 618,
+   "sha256": "4b596d53e850a7a13545e211a26daa6109d40354135c9d1944503893331f513d"
+  },
+  "RUT": {
+   "verses": 85,
+   "sha256": "771b100325bea44176f9492f7123fa6165a94b66d7c77b8c14d7852bbaa13991"
+  },
+  "1SA": {
+   "verses": 810,
+   "sha256": "54416f45ed819b31e1a18ae95ecda4890002a8f27a57fd8e5bd462b44d83f1b2"
+  },
+  "2SA": {
+   "verses": 695,
+   "sha256": "c99c876bb4eb0361a769b09977d6437f70f6b8cc77df229c48de398478fa0d5f"
+  },
+  "1KI": {
+   "verses": 816,
+   "sha256": "a3ae09335d5bf8ff90fc2e2436664bba376d9d6352bd8191bc463337e56cc72f"
+  },
+  "2KI": {
+   "verses": 719,
+   "sha256": "8f527ab6263e5cfcaece59c446b57043e8eace07a94af231a81e06238366c584"
+  },
+  "1CH": {
+   "verses": 942,
+   "sha256": "41b5df0529f90541f1f9ddb4275ae9752036825e4599a4dddedb111ae22306e3"
+  },
+  "2CH": {
+   "verses": 822,
+   "sha256": "25515ae42356d08e104aa8aaf212fcbdc6439e1b6ebefd1835b29145c25b164f"
+  },
+  "EZR": {
+   "verses": 280,
+   "sha256": "55843de1f38e78a9209e5c2b530100084304ef7ba70f51ab8fd61bd45eba2e4f"
+  },
+  "NEH": {
+   "verses": 406,
+   "sha256": "482db785f72fcab455353bebf6c57576ca85a2e13f322d18a83e51c8b9a37d4a"
+  },
+  "EST": {
+   "verses": 167,
+   "sha256": "c7287d2c9a89a410a2b3bbdb002a86c966f543448902bbb83475c377b6ef41f3"
+  },
+  "JOB": {
+   "verses": 1070,
+   "sha256": "1ecb8ad510fd57c97dc23418f4a1d2de1ec5f83ef992e50c542519531617bb4d"
+  },
+  "PSA": {
+   "verses": 2461,
+   "sha256": "b1ff1a3bbaac35ebe1bd4968148717026f2cd352b7b16ab09a9dbbe1df5a290a"
+  },
+  "PRO": {
+   "verses": 915,
+   "sha256": "f132058181965b57e282aa77842bca1c2e94579ca5e718f4f83a7fc70039532e"
+  },
+  "ECC": {
+   "verses": 222,
+   "sha256": "bea87eb039804633e8898b054d397d5e9a2de7605f5d0c485e95a3dd6ebdd5d7"
+  },
+  "SNG": {
+   "verses": 117,
+   "sha256": "827b7135fbed20f7c380eeb86db00b20d0158ada3707e9bb00349a4f2395c938"
+  },
+  "ISA": {
+   "verses": 1292,
+   "sha256": "76e214dfc121bc57d19ed91724280ce0578ff187eb94ec517c9983ca2925f866"
+  },
+  "JER": {
+   "verses": 1364,
+   "sha256": "33ed26a9095d691c02997ca2263da85b691c9c52cd9bda81b0398e2d22601ac2"
+  },
+  "LAM": {
+   "verses": 154,
+   "sha256": "fcaeee6cfe5c0846a069306d3aa344b8a323ff25bc6e6c552f0cdc58697cdb7a"
+  },
+  "EZK": {
+   "verses": 1273,
+   "sha256": "d76be9c7cfcef3d05de5e02aeb2e581b900038a7c5e985d94f4e45ef99e305c9"
+  },
+  "DAN": {
+   "verses": 357,
+   "sha256": "5b795f2bdcee6b609bdb660253708eb2b72f0ce38d11f83180d51749d13049a4"
+  },
+  "HOS": {
+   "verses": 197,
+   "sha256": "fc4ef0f9576256537fcae50be23fa55c597346497a84ea542e51bb84f35013e6"
+  },
+  "JOL": {
+   "verses": 73,
+   "sha256": "97064e4629439c66435b77dfe5a319f3a2238894f1a111d9b0eaf9c61907cfbf"
+  },
+  "AMO": {
+   "verses": 146,
+   "sha256": "e11df41a547b447abdcd287b059042bbe3dbf96f30290a379f74a7b756ebacbf"
+  },
+  "OBA": {
+   "verses": 21,
+   "sha256": "d3686907305cd27ea3f23427d1cc16b201fefbbae2e96288565e9d1fa6e4e9f1"
+  },
+  "JON": {
+   "verses": 48,
+   "sha256": "568c00afd2d520f914f0c172edbdfbd6c3fe9d474592ae3ac388d3d5f0670fd1"
+  },
+  "MIC": {
+   "verses": 105,
+   "sha256": "e4423a4f57484c4c36b0c767d2e419147a93b5ae8b9aa57960cc82f255460125"
+  },
+  "NAM": {
+   "verses": 47,
+   "sha256": "9c4ff44da22289fe9cf028afe28f06a2b9d4e7a200552c8fc98a5ec02b865b88"
+  },
+  "HAB": {
+   "verses": 56,
+   "sha256": "0125041dbd7da04384e8fcccdf9c8f87f2c66f5c019c21992236d63335cf6ce7"
+  },
+  "ZEP": {
+   "verses": 53,
+   "sha256": "30b547c9c4b892e5ce3335ae8ffb51eee9b32358368d6e88b8368506e2939d4c"
+  },
+  "HAG": {
+   "verses": 38,
+   "sha256": "c3e5fa770a4a0fb6f31089e2353ae2a1c32fcd2937e402a5390506888acd53e8"
+  },
+  "ZEC": {
+   "verses": 211,
+   "sha256": "c1a97878d6a44d79d27619daffe8d87e13941fde30002199df288c3969720854"
+  },
+  "MAL": {
+   "verses": 55,
+   "sha256": "8338cdd2098dae1cd136d5c425e8b1ce7d4f0d7178ce0d16a095dc522029f66b"
+  },
+  "MAT": {
+   "verses": 1071,
+   "sha256": "76eb528bdc4503101764aba7b97bb0a3ab98f2d39cd5fd6cec58fe4b06887c05"
+  },
+  "MRK": {
+   "verses": 678,
+   "sha256": "7df6e40f561b41b0cfbf1875c4636496306bf2d53c80cd8835d4da9cf33c2c7a"
+  },
+  "LUK": {
+   "verses": 1151,
+   "sha256": "e66f0ed5944b4c0fb491293e4cb47e2d3cd33b4b5b572719c78a12a595481fcb"
+  },
+  "JHN": {
+   "verses": 879,
+   "sha256": "e2050f396c4f62b0f49fd909c73ae4283e3fee8221206b55ffd2f84b4e2554aa"
+  },
+  "ACT": {
+   "verses": 1007,
+   "sha256": "04951bed338bbfc7d915a1366b9160904d002970ba6f9c57725172099e2897c9"
+  },
+  "ROM": {
+   "verses": 433,
+   "sha256": "b404b3d4c597e2f8f68208d912663b21c253a2308cbae4baf370c4b0002edc6d"
+  },
+  "1CO": {
+   "verses": 437,
+   "sha256": "0cad490a1ecd5c74efcbeec6b8809add467ddcf964f9faf1e170ab757913a7ea"
+  },
+  "2CO": {
+   "verses": 257,
+   "sha256": "2f3d181e4733860db773c8efbfe9bf8c992c5c602f7a9cb03b6a7f911214e84d"
+  },
+  "GAL": {
+   "verses": 149,
+   "sha256": "437331158315341a3d695e337a04a18b9c5b9f0f402d323f9e1364510611e571"
+  },
+  "EPH": {
+   "verses": 155,
+   "sha256": "a5c4752a6986ab24083ce4d8f0ec88d5630351708b2f8b419c36727204749933"
+  },
+  "PHP": {
+   "verses": 104,
+   "sha256": "ffa78381ad3eb4deafd4fb5a10cd6bf5b64fc350349ce6108db06538b87c1b43"
+  },
+  "COL": {
+   "verses": 95,
+   "sha256": "45392f26d10848785884ea928c4901e7986d27062c8e6d30c39b4f5160d5b7cb"
+  },
+  "1TH": {
+   "verses": 89,
+   "sha256": "449d369bbf94d4bb7c737b81ebd4ce80f507bfc700ef5049ee37bc88469bf2e4"
+  },
+  "2TH": {
+   "verses": 47,
+   "sha256": "0fe49c3b7b220f96c968b2a0c726a7f8d5ac28f1f3342324f942488e9a63dd47"
+  },
+  "1TI": {
+   "verses": 113,
+   "sha256": "d76dd6f4e1740bbc7fb45b1f0eebf1def22cbd2085ed5d647dc1d2a3160d04ab"
+  },
+  "2TI": {
+   "verses": 83,
+   "sha256": "5fe9c706e2de2c41ca054faa3e01b30b100ff060fdc7acb586c07467e85a9f44"
+  },
+  "TIT": {
+   "verses": 46,
+   "sha256": "f28e81bd061fb4fbd8f9eacec5a92ec9f777f677b1028997906c94e2dd254608"
+  },
+  "PHM": {
+   "verses": 25,
+   "sha256": "b3d86c8e4ff11fa271f48207ff08feb23cb9abdab98763ea193806377a6cc1b9"
+  },
+  "HEB": {
+   "verses": 303,
+   "sha256": "4cd360f7e1f1d61f57a8786abd99f9be713b9b0de90dc9e18c7a3c49dcfb8f92"
+  },
+  "JAS": {
+   "verses": 108,
+   "sha256": "6bef668765e0ae0dcb54f6284c81d457eb06eba924663de78161e3da0b46b738"
+  },
+  "1PE": {
+   "verses": 105,
+   "sha256": "8adca8413ab28fb1d560a740fbd84493db033060e21d9b8c42b5024ad1d7878e"
+  },
+  "2PE": {
+   "verses": 61,
+   "sha256": "501104467134d4fd65fe9b150dccf1d5ef04afa31a31ff3ea6ef926ab62ab3d2"
+  },
+  "1JN": {
+   "verses": 105,
+   "sha256": "6d2a92fe21d8e0d12019ca672fed0105e760d50d9fd4df3a470d31a59b678538"
+  },
+  "2JN": {
+   "verses": 13,
+   "sha256": "a5c249ab155c8302215546d8994b50501d0b98b25d00558054df050a4015471f"
+  },
+  "3JN": {
+   "verses": 14,
+   "sha256": "e065cd9903d2ef2178c6da000f55b85366dfadae2af45de6c82a088528226a44"
+  },
+  "JUD": {
+   "verses": 25,
+   "sha256": "ce41e7765d4a7f188d5adaeaf5a71052c67da31dc4f7bd4443e082308e47ad63"
+  },
+  "REV": {
+   "verses": 404,
+   "sha256": "53fe2be2b43dc11175b9dc6c065c4bdd5b9b2285a167d6d9a212e3ebd84d4773"
+  }
+ }
+}
