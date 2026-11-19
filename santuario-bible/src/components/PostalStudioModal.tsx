@@ -21,9 +21,9 @@ interface Palette {
 }
 
 const PALETTES: Record<PostalStyle, Palette> = {
-  parchment: { label: "Pergamino", bgFrom: "#FAF6F0", bgTo: "#F3ECE1", text: "#1C1917", muted: "#57534E", accent: "#D97706" },
-  night: { label: "Noche", bgFrom: "#0C0A09", bgTo: "#1C1917", text: "#F5F5F4", muted: "#A8A29E", accent: "#F59E0B" },
-  amber: { label: "Ámbar", bgFrom: "#FBBF24", bgTo: "#D97706", text: "#1C1917", muted: "#44403C", accent: "#1C1917" },
+  parchment: { label: "Pergamino", bgFrom: "#FAF6F0", bgTo: "#F3ECE1", text: "#1C1917", muted: "#57534E", accent: "#86672D" },
+  night: { label: "Noche", bgFrom: "#2C2621", bgTo: "#1C1917", text: "#F5EFE6", muted: "#B8ADA0", accent: "#D4B06A" },
+  amber: { label: "Oro", bgFrom: "#E8CF98", bgTo: "#B8924A", text: "#1C1917", muted: "#3B3226", accent: "#1C1917" },
 };
 
 interface PostalStudioModalProps {

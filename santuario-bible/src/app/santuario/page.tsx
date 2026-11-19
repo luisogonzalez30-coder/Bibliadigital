@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, CalendarDays, HandHeart, Heart, Library, SlidersHorizontal } from "lucide-react";
+import { BrandMark } from "@/components/brand/BrandMark";
 import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyReminder } from "@/components/DailyReminder";
@@ -298,10 +299,10 @@ export default function Home() {
             onClick={() => setView("umbral")}
             className="inline-flex items-center gap-2 rounded-full py-2 pr-3 text-sm text-sanct-muted transition hover:text-sanct-text"
           >
-            <ArrowLeft size={16} aria-hidden /> <span className="scripture text-xl text-sanct-text">Santuario</span>
+            <ArrowLeft size={16} aria-hidden /> <BrandMark className="h-7 w-7" /> <span className="scripture text-xl text-sanct-text">Santuario</span>
           </button>
         ) : (
-          <h1 className="scripture text-xl text-sanct-text">Santuario</h1>
+          <h1 className="flex items-center gap-2"><BrandMark className="h-7 w-7" /> <span className="scripture text-xl text-sanct-text">Santuario</span></h1>
         )}
         <div className="flex items-center gap-1">
           <button

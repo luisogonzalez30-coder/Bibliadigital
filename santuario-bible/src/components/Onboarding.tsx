@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { TRADITIONS_METADATA } from "@/data/canonicalSeed";
 import { FAITH_CHOICES, FAITH_GROUPS, NEED_CHOICES, faithDisplayLabel, initialFaithId } from "@/data/onboarding";
 import { getWelcomeVerse, sanitizeDisplayName } from "@/services/sanctuaryEngine";
@@ -61,7 +62,7 @@ export function Onboarding({ initial, verified, today, onFinish }: OnboardingPro
             <ArrowLeft size={16} aria-hidden /> Atrás
           </button>
         ) : (
-          <span className="scripture text-xl">Santuario Bíblico</span>
+          <BrandLogo />
         )}
         {step < 3 && (
           <p className="text-xs uppercase tracking-widest text-sanct-muted" aria-live="polite">

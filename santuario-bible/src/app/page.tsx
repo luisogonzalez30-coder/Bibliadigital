@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
@@ -103,8 +104,8 @@ export default function LandingPage() {
       {/* Barra flotante */}
       <header className="sticky top-4 z-40 mx-auto mt-4 w-[calc(100%-2rem)] max-w-6xl">
         <nav aria-label="Principal" className="flex items-center justify-between gap-4 rounded-full border border-sanct-border bg-sanct-bg/85 px-5 py-3 backdrop-blur">
-          <Link href="/" className="scripture whitespace-nowrap text-lg sm:text-xl">
-            Santuario Bíblico
+          <Link href="/" aria-label="Santuario Bíblico, inicio">
+            <BrandLogo tagline />
           </Link>
           <ul className="hidden items-center gap-7 text-sm text-sanct-muted lg:flex">
             {NAV.map((l) => (
@@ -372,7 +373,7 @@ export default function LandingPage() {
       <footer className="border-t border-sanct-border px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-3">
           <div className="space-y-3">
-            <p className="scripture text-2xl">Santuario Bíblico</p>
+            <BrandLogo variant="stacked" tagline className="items-start text-left" />
             <p className="text-sm leading-relaxed text-sanct-muted">La Palabra, íntegra y verificada. Textos de dominio público: Reina-Valera 1909 y King James Version.</p>
           </div>
           <nav aria-label="Pie de página" className="space-y-2 text-sm">
