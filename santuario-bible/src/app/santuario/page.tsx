@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, HandHeart, Heart, Library, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, BookOpen, CalendarDays, HandHeart, Heart, Library, SlidersHorizontal } from "lucide-react";
 import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
+import { DailyReminder } from "@/components/DailyReminder";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
 import { FaithCompanionsModal } from "@/components/FaithCompanionsModal";
 import { OfferingInvite } from "@/components/OfferingInvite";
@@ -369,6 +370,17 @@ export default function Home() {
             </span>
           </Link>
 
+          <Link
+            href="/planes"
+            className="flex w-full items-center gap-4 rounded-3xl border border-sanct-border p-6 text-left transition hover:bg-sanct-surface"
+          >
+            <CalendarDays size={26} strokeWidth={1.4} aria-hidden className="shrink-0 text-sanct-accent" />
+            <span>
+              <span className="scripture block text-xl">Planes de lectura</span>
+              <span className="block text-sm text-sanct-muted">7 días para la ansiedad, el cansancio o la gratitud.</span>
+            </span>
+          </Link>
+
           {verified !== null && (
             <ProblemAdvisor
               tradition={state.tradition}
@@ -420,6 +432,7 @@ export default function Home() {
           checked={state.showParallelEnglish}
           onChange={(showParallelEnglish) => update({ showParallelEnglish })}
         />
+        <DailyReminder />
         <ToggleSwitch label="Modo noche" checked={state.darkMode} onChange={(darkMode) => update({ darkMode })} />
         <CloudSyncPanel email={cloudEmail} onSendMagicLink={signInWithMagicLink} onSignOut={signOutCloudUser} />
       </SettingsSheet>

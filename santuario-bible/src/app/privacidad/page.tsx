@@ -10,7 +10,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Lo esencial",
     body: [
-      "Santuario funciona en tu dispositivo y no te exige crear una cuenta. No usamos publicidad, analítica de seguimiento ni cookies de seguimiento.",
+      "Santuario funciona en tu dispositivo y no te exige crear una cuenta. No usamos publicidad ni cookies de seguimiento. Medimos las visitas con estadísticas agregadas y sin cookies (Vercel Web Analytics), que no identifican a las personas ni las siguen entre sitios.",
     ],
   },
   {
@@ -50,6 +50,12 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
     title: "Alojamiento",
     body: [
       "La página se sirve desde un proveedor de alojamiento (Vercel), que puede registrar datos técnicos de las solicitudes, como la dirección IP, por razones de seguridad y funcionamiento.",
+    ],
+  },
+  {
+    title: "Planes de lectura y recordatorio",
+    body: [
+      "El progreso de tus planes se guarda solo en tu dispositivo. El recordatorio diario es un evento de calendario que descargas: lo gestiona tu propio calendario y Santuario no recibe ni guarda tu hora.",
     ],
   },
   {
