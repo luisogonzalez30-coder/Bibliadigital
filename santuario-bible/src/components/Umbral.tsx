@@ -1,4 +1,4 @@
-import { Flame, ImageIcon, BookOpen } from "lucide-react";
+import { Flame, ImageIcon, BookOpen, HandHeart } from "lucide-react";
 import type { CanonicalVerse } from "@/types/bible";
 
 interface UmbralProps {
@@ -13,6 +13,7 @@ interface UmbralProps {
   onStories: () => void;
   onEnter: () => void;
   onPostal: (verse: CanonicalVerse) => void;
+  onCompanions: () => void;
 }
 
 /** Vista de altar: halo de luz, saludo, racha y un único versículo del día. */
@@ -26,6 +27,7 @@ export function Umbral({
   onStories,
   onEnter,
   onPostal,
+  onCompanions,
 }: UmbralProps) {
   return (
     <section aria-label="El Umbral Sagrado" className="relative flex min-h-[calc(100dvh-5rem)] flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-4 text-center">
@@ -86,14 +88,23 @@ export function Umbral({
           >
             Entrar al Santuario
           </button>
-          <button
-            type="button"
-            onClick={() => verse && onPostal(verse)}
-            disabled={!verse}
-            className="inline-flex items-center justify-center gap-2 py-2 text-sm text-sanct-muted transition hover:text-sanct-text disabled:opacity-50"
-          >
-            <ImageIcon size={16} strokeWidth={1.5} aria-hidden /> Crear postal
-          </button>
+          <div className="flex items-center justify-center gap-6">
+            <button
+              type="button"
+              onClick={() => verse && onPostal(verse)}
+              disabled={!verse}
+              className="inline-flex items-center justify-center gap-2 py-2 text-sm text-sanct-muted transition hover:text-sanct-text disabled:opacity-50"
+            >
+              <ImageIcon size={16} strokeWidth={1.5} aria-hidden /> Crear postal
+            </button>
+            <button
+              type="button"
+              onClick={onCompanions}
+              className="inline-flex items-center justify-center gap-2 py-2 text-sm text-sanct-muted transition hover:text-sanct-text"
+            >
+              <HandHeart size={16} strokeWidth={1.5} aria-hidden /> Compañeros de Fe
+            </button>
+          </div>
         </div>
       </div>
     </section>
