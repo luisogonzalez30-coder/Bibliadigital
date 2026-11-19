@@ -1,4 +1,4 @@
-# Santuario · Biblia
+# Santuario Bíblico · Biblia
 
 MVP web instalable (PWA) de lectura bíblica diaria, minimalista y verificada. Next.js 16 (App Router) · React 19 · TypeScript estricto · Tailwind CSS v4.
 

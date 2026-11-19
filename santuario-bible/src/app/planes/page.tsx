@@ -4,7 +4,7 @@ import { BibleHeader } from "@/components/bible/BibleHeader";
 import { READING_PLANS } from "@/data/readingPlans";
 
 export const metadata: Metadata = {
-  title: "Planes de lectura bíblica de 7 días | Santuario",
+  title: "Planes de lectura bíblica de 7 días | Santuario Bíblico",
   description: "Planes de lectura de 7 días para la ansiedad, el cansancio y la gratitud: un capítulo al día con una pregunta para reflexionar.",
   alternates: { canonical: "/planes" },
 };
@@ -17,7 +17,7 @@ export default function PlansIndexPage() {
         <header className="space-y-4">
           <h1 className="scripture text-4xl leading-tight sm:text-5xl">Planes de lectura</h1>
           <p className="leading-relaxed text-sanct-muted">
-            Una semana, un capítulo al día. Cada plan usa la Biblia completa de Santuario y una pregunta breve para reflexionar. Tu progreso se guarda solo en tu dispositivo.
+            Una semana, un capítulo al día. Cada plan usa la Biblia completa de Santuario Bíblico y una pregunta breve para reflexionar. Tu progreso se guarda solo en tu dispositivo.
           </p>
         </header>
         <ul className="space-y-4">

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ libro: st
   const book = getBookBySlug(libro);
   if (!book) return {};
   return {
-    title: `${book.nameEs} · ${BIBLE_VERSION_ES} | Santuario`,
+    title: `${book.nameEs} · ${BIBLE_VERSION_ES} | Santuario Bíblico`,
     description: `Lee ${book.nameEs} (${book.chapters} capítulos) en la ${BIBLE_VERSION_ES}. Texto literal y verificable.`,
     alternates: { canonical: `/biblia/${book.slug}` },
   };

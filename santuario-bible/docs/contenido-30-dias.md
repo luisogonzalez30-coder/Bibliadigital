@@ -1,4 +1,4 @@
-# Contenido de 30 días · Santuario
+# Contenido de 30 días · Santuario Bíblico
 
 > Generado por `scripts/build-content-kit.mjs`. Los versículos se copian **literalmente** de la Biblia completa de la app (Reina-Valera 1909). Los ganchos, textos en pantalla y captions son copy de marketing editable.
 

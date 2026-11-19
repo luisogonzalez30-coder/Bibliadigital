@@ -1,6 +1,6 @@
 import type { EmotionSlug } from '@/types/bible';
 
-/** Textos de las páginas «Versículos para…». Son textos editoriales de Santuario (no Escritura). */
+/** Textos de las páginas «Versículos para…». Son textos editoriales de Santuario Bíblico (no Escritura). */
 export interface EmotionPage {
   readonly slug: EmotionSlug;
   readonly label: string;

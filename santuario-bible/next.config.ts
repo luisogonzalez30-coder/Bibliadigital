@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Enlaces cortos para las biografías de redes: llevan a /historias con el origen ya etiquetado (utm).
+  async redirects() {
+    const to = (source: string) => `/historias?utm_source=${source}&utm_medium=bio&utm_campaign=perfil`;
+    return [
+      { source: "/ig", destination: to("instagram"), permanent: false },
+      { source: "/tiktok", destination: to("tiktok"), permanent: false },
+      { source: "/yt", destination: to("youtube"), permanent: false },
+    ];
+  },
   partialPrefetching: true,
   turbopack: {
     rules: {

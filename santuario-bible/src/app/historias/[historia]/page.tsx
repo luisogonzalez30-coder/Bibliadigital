@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ historia:
   const s = getStory(historia);
   if (!s) return {};
   return {
-    title: `${s.title} (${s.reference}) | Santuario`,
+    title: `${s.title} (${s.reference}) | Santuario Bíblico`,
     description: s.description,
     alternates: { canonical: `/historias/${s.id}` },
   };
@@ -70,8 +70,8 @@ export default async function StoryPage({ params }: { params: Promise<{ historia
           ))}
         </ul>
 
-        <section aria-label="Sigue en Santuario" className="space-y-4 rounded-3xl border border-sanct-border p-7">
-          <h2 className="scripture text-2xl">Sigue leyendo en Santuario</h2>
+        <section aria-label="Sigue en Santuario Bíblico" className="space-y-4 rounded-3xl border border-sanct-border p-7">
+          <h2 className="scripture text-2xl">Sigue leyendo en Santuario Bíblico</h2>
           <p className="text-sm leading-relaxed text-sanct-muted">
             La Biblia completa, un versículo al día y tu Racha de Luz. Gratis, sin cuenta y sin publicidad.
           </p>
@@ -97,7 +97,7 @@ export default async function StoryPage({ params }: { params: Promise<{ historia
         )}
 
         <p className="text-xs leading-relaxed text-sanct-muted">
-          Los versículos son el texto literal de la Reina-Valera 1909 (dominio público). La introducción y los enlaces son de Santuario y no son Escritura.
+          Los versículos son el texto literal de la Reina-Valera 1909 (dominio público). La introducción y los enlaces son de Santuario Bíblico y no son Escritura.
         </p>
       </main>
     </div>

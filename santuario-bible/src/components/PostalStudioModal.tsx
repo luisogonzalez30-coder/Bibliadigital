@@ -7,7 +7,7 @@ import type { CanonicalVerse } from "@/types/bible";
 const WIDTH = 1080;
 const HEIGHT = 1920;
 const MARGIN = 120;
-const SEAL = "Escritura 100% Verificada · Santuario";
+const SEAL = "Escritura 100% Verificada · Santuario Bíblico";
 
 type PostalStyle = "parchment" | "night" | "amber";
 
@@ -246,7 +246,7 @@ export function PostalStudioModal({ verse, showParallelEnglish, onClose: onClose
 
         {onOffer && downloadedId === verse.id && (
           <p role="status" className="text-center text-xs text-sanct-muted">
-            ¿Te acompañó esta postal? Santuario sigue libre para todos.{" "}
+            ¿Te acompañó esta postal? Santuario Bíblico sigue libre para todos.{" "}
             <button type="button" onClick={onOffer} className="text-sanct-accent underline underline-offset-4">
               Aportar
             </button>

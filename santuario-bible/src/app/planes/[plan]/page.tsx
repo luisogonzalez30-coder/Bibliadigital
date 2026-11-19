@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ plan: str
   const { plan } = await params;
   const p = getPlan(plan);
   if (!p) return {};
-  return { title: `${p.title} | Santuario`, description: p.description, alternates: { canonical: `/planes/${p.id}` } };
+  return { title: `${p.title} | Santuario Bíblico`, description: p.description, alternates: { canonical: `/planes/${p.id}` } };
 }
 
 export default async function PlanPage({ params }: { params: Promise<{ plan: string }> }) {
@@ -46,7 +46,7 @@ export default async function PlanPage({ params }: { params: Promise<{ plan: str
         </header>
         <PlanProgress planId={p.id} days={days} />
         <p className="text-xs leading-relaxed text-sanct-muted">
-          Las preguntas son de Santuario y no son Escritura. Si estás pasando por un momento muy difícil, busca también a una persona de confianza o a un profesional.
+          Las preguntas son de Santuario Bíblico y no son Escritura. Si estás pasando por un momento muy difícil, busca también a una persona de confianza o a un profesional.
         </p>
       </main>
     </div>

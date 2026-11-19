@@ -1,6 +1,6 @@
 /**
  * Historias de la serie de videos «Historias en 1 minuto». Cada una muestra los versículos EXACTOS del video,
- * leídos literalmente de la Biblia completa (RV1909). Los textos editoriales (intro, siguiente) son de Santuario.
+ * leídos literalmente de la Biblia completa (RV1909). Los textos editoriales (intro, siguiente) son de Santuario Bíblico.
  */
 export interface StoryPassage {
   readonly osis: string;

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const first = verses.find((v) => v.es)?.es ?? verses[0]?.en ?? "";
   const excerpt = first.length > 120 ? `${first.slice(0, 117)}…` : first;
   return {
-    title: `${book.nameEs} ${chapter} · ${BIBLE_VERSION_ES} | Santuario`,
+    title: `${book.nameEs} ${chapter} · ${BIBLE_VERSION_ES} | Santuario Bíblico`,
     description: `${book.nameEs} ${chapter} en la ${BIBLE_VERSION_ES}: «${excerpt}» Texto literal y verificable.`,
     alternates: { canonical: `/biblia/${book.slug}/${chapter}` },
   };

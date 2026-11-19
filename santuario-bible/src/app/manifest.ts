@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Santuario · Lectura Bíblica Diaria",
+    name: "Santuario Bíblico · Lectura Bíblica Diaria",
     short_name: "Santuario",
     description: "Lectura diaria de las Escrituras, íntegra y verificada.",
     start_url: "/santuario",

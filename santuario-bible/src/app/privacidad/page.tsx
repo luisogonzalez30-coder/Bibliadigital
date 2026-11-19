@@ -2,22 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacidad · Santuario",
-  description: "Qué guarda Santuario, dónde y por qué. Explicado con claridad.",
+  title: "Privacidad · Santuario Bíblico",
+  description: "Qué guarda Santuario Bíblico, dónde y por qué. Explicado con claridad.",
 };
 
 const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Lo esencial",
     body: [
-      "Santuario funciona en tu dispositivo y no te exige crear una cuenta. No usamos publicidad ni cookies de seguimiento. Medimos las visitas con estadísticas agregadas y sin cookies (Vercel Web Analytics), que no identifican a las personas ni las siguen entre sitios.",
+      "Santuario Bíblico funciona en tu dispositivo y no te exige crear una cuenta. No usamos publicidad ni cookies de seguimiento. Medimos las visitas con estadísticas agregadas y sin cookies (Vercel Web Analytics), que no identifican a las personas ni las siguen entre sitios.",
     ],
   },
   {
     title: "Estadísticas anónimas de uso",
     body: [
-      "Para saber cuánta gente usa Santuario, la app registra tres eventos: abrir la app (una vez al día), instalarla y leer un capítulo. Cada evento lleva un código aleatorio generado en tu dispositivo, la ruta de la página y si la abriste como app instalada. Si llegaste desde un enlace con etiquetas de campaña (por ejemplo, de qué video vienes), esa etiqueta se guarda en tu dispositivo y viaja con esos eventos. No incluye tu nombre, tu correo, tu IP ni lo que escribes.",
-      "Puedes desactivarlo en Ajustes («Ayudar a mejorar Santuario») o con la opción «No rastrear» de tu navegador; al desactivarlo se borra ese código. Los eventos se guardan en Supabase.",
+      "Para saber cuánta gente usa Santuario Bíblico, la app registra tres eventos: abrir la app (una vez al día), instalarla y leer un capítulo. Cada evento lleva un código aleatorio generado en tu dispositivo, la ruta de la página y si la abriste como app instalada. Si llegaste desde un enlace con etiquetas de campaña (por ejemplo, de qué video vienes), esa etiqueta se guarda en tu dispositivo y viaja con esos eventos. No incluye tu nombre, tu correo, tu IP ni lo que escribes.",
+      "Puedes desactivarlo en Ajustes («Ayudar a mejorar Santuario Bíblico») o con la opción «No rastrear» de tu navegador; al desactivarlo se borra ese código. Los eventos se guardan en Supabase.",
     ],
   },
   {
@@ -30,7 +30,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Respaldo opcional con tu correo",
     body: [
-      "Si decides iniciar sesión con un enlace enviado a tu correo, guardamos en un servicio de base de datos (Supabase) tu correo, tu tradición, tu racha y tus favoritos, para que no los pierdas al cambiar de dispositivo. Es totalmente opcional. Quien administra Santuario puede ver, en un panel protegido, el correo, la fecha de registro y la racha de las cuentas para entender cuánta gente lee cada día.",
+      "Si decides iniciar sesión con un enlace enviado a tu correo, guardamos en un servicio de base de datos (Supabase) tu correo, tu tradición, tu racha y tus favoritos, para que no los pierdas al cambiar de dispositivo. Es totalmente opcional. Quien administra Santuario Bíblico puede ver, en un panel protegido, el correo, la fecha de registro y la racha de las cuentas para entender cuánta gente lee cada día.",
       "Cerrar sesión no borra esos datos de la nube. Aún no hay un botón para eliminar tu cuenta desde la app; está pendiente en nuestra lista de trabajo.",
     ],
   },
@@ -38,7 +38,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
     title: "«Describe tu problema»",
     body: [
       "El texto que escribes se analiza en tu dispositivo y no se guarda ni se envía a ningún servidor nuestro.",
-      "Si usas el dictado por voz, el audio lo procesa el servicio de reconocimiento de voz de tu navegador (en Chrome, por ejemplo, lo realiza un servicio de Google). Santuario no recibe ni almacena ese audio.",
+      "Si usas el dictado por voz, el audio lo procesa el servicio de reconocimiento de voz de tu navegador (en Chrome, por ejemplo, lo realiza un servicio de Google). Santuario Bíblico no recibe ni almacena ese audio.",
     ],
   },
   {
@@ -50,7 +50,7 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Aporte voluntario",
     body: [
-      "El botón de aporte te lleva a un medio de pago externo en una pestaña nueva. Santuario no procesa pagos ni ve ni guarda datos de tu tarjeta.",
+      "El botón de aporte te lleva a un medio de pago externo en una pestaña nueva. Santuario Bíblico no procesa pagos ni ve ni guarda datos de tu tarjeta.",
     ],
   },
   {
@@ -62,13 +62,13 @@ const SECTIONS: ReadonlyArray<{ title: string; body: string[] }> = [
   {
     title: "Planes de lectura y recordatorio",
     body: [
-      "El progreso de tus planes se guarda solo en tu dispositivo. El recordatorio diario es un evento de calendario que descargas: lo gestiona tu propio calendario y Santuario no recibe ni guarda tu hora.",
+      "El progreso de tus planes se guarda solo en tu dispositivo. El recordatorio diario es un evento de calendario que descargas: lo gestiona tu propio calendario y Santuario Bíblico no recibe ni guarda tu hora.",
     ],
   },
   {
     title: "Esto es informativo",
     body: [
-      "Esta página describe cómo funciona Santuario hoy. No constituye asesoría legal y puede actualizarse cuando la app cambie.",
+      "Esta página describe cómo funciona Santuario Bíblico hoy. No constituye asesoría legal y puede actualizarse cuando la app cambie.",
     ],
   },
 ];

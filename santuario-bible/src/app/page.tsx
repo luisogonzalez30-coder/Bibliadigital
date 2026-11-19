@@ -23,7 +23,7 @@ import { isOfferingConfigured } from "@/services/offeringConfig";
 import { CRISIS_RESOURCES } from "@/services/problemAdvisor";
 
 export const metadata: Metadata = {
-  title: "Santuario · La Palabra, íntegra y verificada",
+  title: "Santuario Bíblico · La Palabra, íntegra y verificada",
   description:
     "Lectura bíblica diaria con versículos reales, nunca resumidos ni inventados, de la tradición que elijas. Gratis, sin cuenta y con tu privacidad primero.",
 };
@@ -73,10 +73,10 @@ const FAQ: ReadonlyArray<{ q: string; a: string }> = [
     q: "¿De dónde salen los versículos?",
     a: "De ediciones de dominio público: Reina-Valera 1909 (español) y King James Version (inglés). Se copian literalmente y cada uno lleva una huella SHA-256 que la app comprueba antes de mostrarlo.",
   },
-  { q: "¿Cuesta algo?", a: "No. La lectura diaria, la Brújula del Alma y las postales son gratis. Si Santuario te hace bien, puedes hacer un aporte voluntario, sin ninguna obligación." },
+  { q: "¿Cuesta algo?", a: "No. La lectura diaria, la Brújula del Alma y las postales son gratis. Si Santuario Bíblico te hace bien, puedes hacer un aporte voluntario, sin ninguna obligación." },
   { q: "¿Necesito crear una cuenta?", a: "No. Todo funciona en tu dispositivo. Iniciar sesión con tu correo es opcional y solo sirve para respaldar tu tradición, tu racha y tus favoritos." },
   { q: "¿Guardan lo que escribo cuando describo mi problema?", a: "No. El texto se analiza en tu dispositivo y no se guarda ni se envía. Si usas el dictado por voz, el audio lo procesa el servicio de voz de tu navegador." },
-  { q: "¿Reemplaza a mi sacerdote, pastor o a un profesional de salud?", a: "No. Santuario ofrece compañía y orientación general. Para decisiones importantes o momentos difíciles, busca a tu guía espiritual o a un profesional." },
+  { q: "¿Reemplaza a mi sacerdote, pastor o a un profesional de salud?", a: "No. Santuario Bíblico ofrece compañía y orientación general. Para decisiones importantes o momentos difíciles, busca a tu guía espiritual o a un profesional." },
   { q: "¿Funciona sin internet?", a: "Sí, una vez abierta o instalada como app. El dictado por voz es la excepción: depende del servicio de tu navegador." },
   {
     q: "¿Está la Biblia completa?",
@@ -103,8 +103,8 @@ export default function LandingPage() {
       {/* Barra flotante */}
       <header className="sticky top-4 z-40 mx-auto mt-4 w-[calc(100%-2rem)] max-w-6xl">
         <nav aria-label="Principal" className="flex items-center justify-between gap-4 rounded-full border border-sanct-border bg-sanct-bg/85 px-5 py-3 backdrop-blur">
-          <Link href="/" className="scripture text-xl">
-            Santuario
+          <Link href="/" className="scripture whitespace-nowrap text-lg sm:text-xl">
+            Santuario Bíblico
           </Link>
           <ul className="hidden items-center gap-7 text-sm text-sanct-muted lg:flex">
             {NAV.map((l) => (
@@ -149,7 +149,7 @@ export default function LandingPage() {
               La Palabra, íntegra y <em className="text-sanct-accent">verificada</em>.
             </h1>
             <p className="max-w-xl text-lg leading-relaxed text-sanct-muted">
-              Santuario te acompaña cada día con versículos reales —nunca resumidos, nunca inventados— de la tradición que elijas. Un momento de calma, en tu bolsillo.
+              Santuario Bíblico te acompaña cada día con versículos reales —nunca resumidos, nunca inventados— de la tradición que elijas. Un momento de calma, en tu bolsillo.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/santuario" className={primaryBtn}>
@@ -184,7 +184,7 @@ export default function LandingPage() {
         </section>
 
         {/* Cifras reales */}
-        <section aria-label="Santuario en cifras" className="border-y border-sanct-border">
+        <section aria-label="Santuario Bíblico en cifras" className="border-y border-sanct-border">
           <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 py-10 text-center sm:grid-cols-4">
             {[
               [String(TRADITIONS_METADATA.length), "tradiciones"],
@@ -207,7 +207,7 @@ export default function LandingPage() {
             number="01"
             label="Nuestro camino"
             title={<>Un paso a la vez, <em className="text-sanct-accent">cada día</em>.</>}
-            intro="Santuario no es un chatbot que inventa respuestas: es un lugar sereno donde cada texto viene de las Escrituras y cada consejo se declara como lo que es."
+            intro="Santuario Bíblico no es un chatbot que inventa respuestas: es un lugar sereno donde cada texto viene de las Escrituras y cada consejo se declara como lo que es."
           />
           <ol className="grid gap-6 md:grid-cols-3">
             {STEPS.map((s) => (
@@ -240,7 +240,7 @@ export default function LandingPage() {
             number="02"
             label="Las Escrituras"
             title={<>Cuatro tradiciones, <em className="text-sanct-accent">un mismo respeto</em>.</>}
-            intro="Eliges tu canon y Santuario te muestra solo lo que corresponde a él. Los textos provienen de Reina-Valera 1909 (español) y King James Version (inglés)."
+            intro="Eliges tu canon y Santuario Bíblico te muestra solo lo que corresponde a él. Los textos provienen de Reina-Valera 1909 (español) y King James Version (inglés)."
           />
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {TRADITIONS_METADATA.map((t) => (
@@ -296,7 +296,7 @@ export default function LandingPage() {
           <aside role="note" className="space-y-3 rounded-3xl border border-sanct-accent/50 p-8">
             <h3 className="scripture text-xl">Importante: tu bienestar primero</h3>
             <p className="leading-relaxed text-sanct-muted">
-              Santuario no reemplaza a tu sacerdote, pastor, rabino o guía espiritual, ni a un profesional de la salud mental. Si estás pasando por un momento muy difícil, busca ayuda ahora:
+              Santuario Bíblico no reemplaza a tu sacerdote, pastor, rabino o guía espiritual, ni a un profesional de la salud mental. Si estás pasando por un momento muy difícil, busca ayuda ahora:
             </p>
             <ul className="space-y-1 text-sm text-sanct-muted">
               {CRISIS_RESOURCES.selfHarm.lines.map((line) => (
@@ -332,7 +332,7 @@ export default function LandingPage() {
               <Smartphone size={26} strokeWidth={1.4} aria-hidden className="text-sanct-accent" /> Instálala como app
             </h2>
             <p className="max-w-2xl leading-relaxed text-sanct-muted">
-              No necesitas una tienda de aplicaciones. Instalada, Santuario abre a pantalla completa y funciona sin conexión.
+              No necesitas una tienda de aplicaciones. Instalada, Santuario Bíblico abre a pantalla completa y funciona sin conexión.
             </p>
             <ul className="grid gap-4 text-sm text-sanct-muted sm:grid-cols-3">
               <li><strong className="block font-medium text-sanct-text">Android (Chrome)</strong> Menú ⋮ → «Instalar app» o «Añadir a pantalla de inicio».</li>
@@ -348,7 +348,7 @@ export default function LandingPage() {
           <section aria-labelledby="aporte-title" className="mx-auto max-w-3xl space-y-5 px-6 pb-24 text-center">
             <h2 id="aporte-title" className="scripture text-3xl">Ayúdanos a mantenerla viva</h2>
             <p className="leading-relaxed text-sanct-muted">
-              Santuario es libre para todos. Si te acompaña, tu aporte voluntario ayuda a sostener la plataforma y a sumar más pasajes verificados. Sin presión: cualquier monto, o ninguno, es bienvenido.
+              Santuario Bíblico es libre para todos. Si te acompaña, tu aporte voluntario ayuda a sostener la plataforma y a sumar más pasajes verificados. Sin presión: cualquier monto, o ninguno, es bienvenido.
             </p>
             <OfferingSection />
           </section>
@@ -372,7 +372,7 @@ export default function LandingPage() {
       <footer className="border-t border-sanct-border px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-3">
           <div className="space-y-3">
-            <p className="scripture text-2xl">Santuario</p>
+            <p className="scripture text-2xl">Santuario Bíblico</p>
             <p className="text-sm leading-relaxed text-sanct-muted">La Palabra, íntegra y verificada. Textos de dominio público: Reina-Valera 1909 y King James Version.</p>
           </div>
           <nav aria-label="Pie de página" className="space-y-2 text-sm">

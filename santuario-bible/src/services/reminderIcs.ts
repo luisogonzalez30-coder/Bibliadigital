@@ -26,7 +26,7 @@ export interface ReminderOptions {
   appUrl: string;
 }
 
-const SUMMARY = 'Santuario · Tu lectura de hoy';
+const SUMMARY = 'Santuario Bíblico · Tu lectura de hoy';
 const DESCRIPTION = 'Tu versículo del día te espera.';
 
 export function firstOccurrence({ hour, minute, now }: Pick<ReminderOptions, 'hour' | 'minute' | 'now'>): Date {
