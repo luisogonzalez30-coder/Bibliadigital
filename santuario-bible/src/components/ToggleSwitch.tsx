@@ -11,7 +11,7 @@ export function ToggleSwitch({ label, checked, onChange }: ToggleSwitchProps) {
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-4 rounded-xl bg-sanct-surface px-4 py-3 text-left text-sm"
+      className="flex w-full items-center justify-between gap-4 rounded-2xl border border-sanct-border px-4 py-3 text-left text-sm"
     >
       <span>{label}</span>
       <span

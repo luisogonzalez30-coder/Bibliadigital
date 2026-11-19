@@ -17,11 +17,11 @@ export interface EmotionMetadata {
 }
 
 export const EMOTIONS_METADATA: readonly EmotionMetadata[] = [
-  { slug: 'ansiedad', labelEs: 'Ansiedad', labelEn: 'Anxiety', subtitleEs: 'Cuando la mente no se detiene', icon: 'Wind' },
+  { slug: 'ansiedad', labelEs: 'Paz', labelEn: 'Peace', subtitleEs: 'Para aquietar la mente inquieta', icon: 'Wind' },
+  { slug: 'cansancio', labelEs: 'Fuerza', labelEn: 'Strength', subtitleEs: 'Cuando las fuerzas se agotan', icon: 'Moon' },
   { slug: 'gratitud', labelEs: 'Gratitud', labelEn: 'Gratitude', subtitleEs: 'Para dar gracias', icon: 'Sprout' },
-  { slug: 'duelo', labelEs: 'Duelo', labelEn: 'Grief', subtitleEs: 'En la pérdida y la tristeza', icon: 'CloudRain' },
-  { slug: 'cansancio', labelEs: 'Cansancio', labelEn: 'Weariness', subtitleEs: 'Cuando las fuerzas se agotan', icon: 'Moon' },
-  { slug: 'sabiduria', labelEs: 'Sabiduría', labelEn: 'Wisdom', subtitleEs: 'Para decidir con claridad', icon: 'Lamp' },
+  { slug: 'duelo', labelEs: 'Consuelo', labelEn: 'Comfort', subtitleEs: 'En la pérdida y la tristeza', icon: 'CloudRain' },
+  { slug: 'sabiduria', labelEs: 'Guía', labelEn: 'Guidance', subtitleEs: 'Para decidir con claridad', icon: 'Lamp' },
 ];
 
 // Textos copiados literalmente de RV1909 (SpaRV) y KJV; hash = sha256(textEs + "|" + textEn). Generado, no editar a mano.

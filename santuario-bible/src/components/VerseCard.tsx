@@ -11,14 +11,14 @@ interface VerseCardProps {
 
 export function VerseCard({ verse, showParallelEnglish, bookmarked, onToggleBookmark, onCreatePostal }: VerseCardProps) {
   return (
-    <article className="space-y-4 rounded-2xl bg-sanct-surface p-6">
-      <p lang="es" className="scripture text-xl leading-relaxed">
+    <article className="space-y-6 rounded-3xl border border-sanct-border bg-sanct-surface p-8 sm:p-10">
+      <p lang="es" className="scripture text-2xl leading-[1.7]">
         {verse.textEs}
       </p>
       {showParallelEnglish && (
         <p
           lang="en"
-          className="scripture border-l-2 border-sanct-accent pl-4 text-base italic leading-relaxed text-sanct-muted"
+          className="scripture border-l border-sanct-accent/60 pl-5 text-lg italic leading-relaxed text-sanct-muted"
         >
           {verse.textEn}
         </p>
