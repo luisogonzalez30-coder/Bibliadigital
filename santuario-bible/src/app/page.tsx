@@ -1,21 +1,30 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, BookOpen, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft, BookOpen, Heart, SlidersHorizontal } from "lucide-react";
 import { AmbientSoundToggle } from "@/components/AmbientSoundToggle";
 import { CloudSyncPanel } from "@/components/CloudSyncPanel";
 import { DailyStoriesModal } from "@/components/DailyStoriesModal";
+import { OfferingInvite } from "@/components/OfferingInvite";
 import { PostalStudioModal } from "@/components/PostalStudioModal";
 import { ProblemAdvisor } from "@/components/ProblemAdvisor";
 import { SettingsSheet } from "@/components/SettingsSheet";
 import { SoulCompass } from "@/components/SoulCompass";
 import { Umbral } from "@/components/Umbral";
+import { VoluntaryOfferingModal } from "@/components/VoluntaryOfferingModal";
 import { DeuterocanonNotice } from "@/components/DeuterocanonNotice";
 import { StreakPanel } from "@/components/StreakPanel";
 import { ToggleSwitch } from "@/components/ToggleSwitch";
 import { TraditionSelector } from "@/components/TraditionSelector";
 import { VerseCard } from "@/components/VerseCard";
 import { CANONICAL_VERSES } from "@/data/canonicalSeed";
+import {
+  isOfferingConfigured,
+  loadOfferingPrefs,
+  saveOfferingPrefs,
+  shouldInviteToday,
+  snoozeUntilFrom,
+} from "@/services/offeringConfig";
 import {
   DEFAULT_USER_STATE,
   filterVerifiedVerses,
@@ -79,6 +88,8 @@ export default function Home() {
   const [postalVerse, setPostalVerse] = useState<CanonicalVerse | null>(null);
   const [view, setView] = useState<View>("umbral");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [offeringOpen, setOfferingOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const [clock, setClock] = useState<{ greeting: string; dateLabel: string } | null>(null);
 
   useEffect(() => {
@@ -188,7 +199,23 @@ export default function Home() {
   const handleCompleteReading = useCallback(() => {
     registerTodayReading();
     setStoriesOpen(false);
-  }, [registerTodayReading]);
+    // Invitación opcional: máximo una vez al día y sólo si el aporte está configurado.
+    if (today && shouldInviteToday(loadOfferingPrefs(), today)) {
+      saveOfferingPrefs({ lastInviteDate: today });
+      setInviteOpen(true);
+    }
+  }, [registerTodayReading, today]);
+
+  const closeOffering = useCallback(() => setOfferingOpen(false), []);
+  const openOffering = useCallback(() => setOfferingOpen(true), []);
+  const acceptInvite = useCallback(() => {
+    setInviteOpen(false);
+    setOfferingOpen(true);
+  }, []);
+  const dismissInvite = useCallback(() => {
+    if (today) saveOfferingPrefs({ snoozeUntil: snoozeUntilFrom(today) });
+    setInviteOpen(false);
+  }, [today]);
 
   const handleTraditionChange = useCallback(
     (tradition: TraditionSlug) => {
@@ -223,6 +250,14 @@ export default function Home() {
           <h1 className="scripture text-xl text-sanct-text">Santuario</h1>
         )}
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={openOffering}
+            title="Aporte voluntario"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm text-sanct-muted transition hover:bg-sanct-surface hover:text-sanct-text"
+          >
+            <Heart size={16} strokeWidth={1.5} aria-hidden /> Aportar
+          </button>
           <AmbientSoundToggle />
           <button
             type="button"
@@ -336,7 +371,11 @@ export default function Home() {
         verse={postalVerse}
         showParallelEnglish={state.showParallelEnglish}
         onClose={() => setPostalVerse(null)}
+        onOffer={isOfferingConfigured() ? openOffering : undefined}
       />
+
+      {inviteOpen && !offeringOpen && <OfferingInvite onAccept={acceptInvite} onDismiss={dismissInvite} />}
+      {offeringOpen && <VoluntaryOfferingModal onClose={closeOffering} />}
     </main>
   );
 }

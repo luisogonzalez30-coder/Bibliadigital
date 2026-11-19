@@ -30,6 +30,8 @@ interface PostalStudioModalProps {
   verse: CanonicalVerse | null;
   showParallelEnglish: boolean;
   onClose: () => void;
+  /** Si se define, tras descargar se sugiere (sin bloquear) el aporte voluntario. */
+  onOffer?: () => void;
 }
 
 /** Divide el texto por palabras para que cada línea quepa en maxWidth con la fuente actual del contexto. */
@@ -135,9 +137,14 @@ function drawPostal(
   ctx.fillText(SEAL, WIDTH / 2, footerY);
 }
 
-export function PostalStudioModal({ verse, showParallelEnglish, onClose }: PostalStudioModalProps) {
+export function PostalStudioModal({ verse, showParallelEnglish, onClose: onCloseProp, onOffer }: PostalStudioModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [style, setStyle] = useState<PostalStyle>("parchment");
+  const [downloadedId, setDownloadedId] = useState<string | null>(null);
+  const onClose = useCallback(() => {
+    setDownloadedId(null);
+    onCloseProp();
+  }, [onCloseProp]);
   const open = verse !== null;
 
   useEffect(() => {
@@ -185,6 +192,7 @@ export function PostalStudioModal({ verse, showParallelEnglish, onClose }: Posta
       a.download = `santuario-${verse.id}.png`;
       a.click();
       URL.revokeObjectURL(url);
+      setDownloadedId(verse.id);
     }, "image/png");
   }, [verse]);
 
@@ -235,6 +243,15 @@ export function PostalStudioModal({ verse, showParallelEnglish, onClose }: Posta
         >
           <Download size={16} aria-hidden /> Descargar PNG
         </button>
+
+        {onOffer && downloadedId === verse.id && (
+          <p role="status" className="text-center text-xs text-sanct-muted">
+            ¿Te acompañó esta postal? Santuario sigue libre para todos.{" "}
+            <button type="button" onClick={onOffer} className="text-sanct-accent underline underline-offset-4">
+              Aportar
+            </button>
+          </p>
+        )}
       </div>
     </div>
   );
