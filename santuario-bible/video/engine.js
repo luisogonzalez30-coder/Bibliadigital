@@ -268,13 +268,15 @@
       t += dur;
     };
     push("title", 2.6, {});
-    story.shots.forEach((shot, i) => {
-      const verses = shot.verses.map((k) => ({ key: k, ...window.VERSES[k] }));
+    story.shots.forEach((shot, index) => {
+      // «verses»: Escritura literal (con referencia). «lines»: narración propia de Santuario (sin referencia, nunca Escritura).
+      const verses = (shot.verses ?? []).map((k) => ({ key: k, ...window.VERSES[k] }));
+      (shot.lines ?? []).forEach((txt, li) => verses.push({ key: `line${index}.${li}`, es: txt, label: null }));
       const pages = [];
       let words = 0;
       verses.forEach((v) => {
         paginate(v.es).forEach((p) => {
-          pages.push({ words: p, ref: v.label });
+          pages.push({ words: p, ref: v.label, gid: v.key });
           words += p.length;
         });
       });
@@ -286,7 +288,7 @@
         p.dur = (p.words.length / words) * (readable - 0.4);
         pt += p.dur;
       });
-      push("shot", dur, { shot, pages, index: i });
+      push("shot", dur, { shot, pages, index });
     });
     push("end", 4.2, {});
     return { items, total: t };
@@ -398,9 +400,11 @@
             idx++;
           });
         });
+        if (page.ref) {
         const ref = el("text", { x: 540, y: 1340, "text-anchor": "middle", fill: GOLD, "font-family": "Inter, sans-serif", "font-size": 28, "letter-spacing": 6, "font-weight": 600 }, cap);
         ref.textContent = page.ref.toUpperCase();
         cap.__ref = ref;
+        }
       }
     }
     if (page && cap.__words) {
@@ -480,7 +484,7 @@
     return { total: t, starts };
   }
 
-  const H_ = { el, grp, gradient, sky, stars, orb, hills, groundLine, figure, lion, camel, angel, palm, rays, vignette, clip, bird, clamp, ease, easeOut, lerp, seg, rng, GOLD, PARCH, NIGHT, W, H };
+  const H_ = { getDefs: () => defs, el, grp, gradient, sky, stars, orb, hills, groundLine, figure, lion, camel, angel, palm, rays, vignette, clip, bird, clamp, ease, easeOut, lerp, seg, rng, GOLD, PARCH, NIGHT, W, H };
 
   window.__video = {
     ready: async (st) => {
@@ -492,7 +496,7 @@
     },
     setFrame,
     retime,
-    pagesText: () => tl.items.filter((i) => i.kind === "shot").flatMap((i) => i.pages.map((p) => ({ ref: p.ref, text: p.words.join(" ") }))),
+    pagesText: () => tl.items.filter((i) => i.kind === "shot").flatMap((i) => i.pages.map((p) => ({ ref: p.ref, gid: p.gid, text: p.words.join(" ") }))),
     info: () => tl.items.map((i) => ({ kind: i.kind, start: +i.start.toFixed(2), dur: +i.dur.toFixed(2) })),
   };
 })();
