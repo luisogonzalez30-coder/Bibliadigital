@@ -267,7 +267,7 @@
       items.push({ kind, start: t, dur, ...extra });
       t += dur;
     };
-    push("title", 2.6, {});
+    push("title", story.titleDur ?? 2.6, {});
     story.shots.forEach((shot, index) => {
       // «verses»: Escritura literal (con referencia). «lines»: narración propia de Santuario (sin referencia, nunca Escritura).
       const verses = (shot.verses ?? []).map((k) => ({ key: k, ...window.VERSES[k] }));
@@ -290,7 +290,7 @@
       });
       push("shot", dur, { shot, pages, index });
     });
-    push("end", 4.2, {});
+    push("end", story.endDur ?? 4.2, {});
     return { items, total: t };
   }
 
@@ -467,7 +467,7 @@
     tl.items.forEach((it) => {
       it.start = t;
       if (it.kind === "shot") {
-        let pt = 0.4;
+        let pt = story.lead ?? 0.4;
         it.pages.forEach((p) => {
           const d = durs[k++];
           p.start = pt;
@@ -475,7 +475,7 @@
           starts.push(it.start + pt);
           pt += p.dur;
         });
-        it.dur = pt + 0.55;
+        it.dur = pt + (story.tail ?? 0.55);
       }
       t += it.dur;
     });
