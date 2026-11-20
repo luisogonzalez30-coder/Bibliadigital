@@ -3,7 +3,7 @@
  * Uso:  node video/render.mjs <historia> [--out dir] [--fps 30] [--stills 1.5,8,20] [--audio-only] [--voice] [--voice-name es-CL-LorenzoNeural] [--rate -8%]
  * Requiere: playwright (con Chromium) y ffmpeg. El texto bíblico se lee literal de src/data/bible/*.json. */
 import { createRequire } from "node:module";
-import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
 import { spawn, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -28,7 +28,9 @@ const outDir = path.resolve(opt("out", path.join(root, "video", "out")));
 const fps = Number(opt("fps", 30));
 const audioOnly = args.includes("--audio-only");
 const useVoice = args.includes("--voice");
-const voiceName = opt("voice-name", "es-CL-LorenzoNeural");
+const ttsProvider = opt("tts", "azure"); // azure | openai
+const voiceTempo = Number(opt("tempo", ttsProvider === "openai" ? 1.08 : 1)); // acelera un poco sin cambiar el tono
+const voiceName = opt("voice-name", ttsProvider === "openai" ? "coral" : "es-CL-LorenzoNeural");
 const voiceRate = opt("rate", "0%");
 const stills = opt("stills", "")
   .split(",")
@@ -36,7 +38,7 @@ const stills = opt("stills", "")
   .map(Number);
 mkdirSync(outDir, { recursive: true });
 
-const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo" };
+const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo", ISA: "Isaías", JER: "Jeremías", PHP: "Filipenses", PSA: "Salmos", JHN: "Juan" };
 const SOURCE = "RV 1909";
 
 /** Lee un versículo literal del catálogo verificado. Falla si falta o está vacío (no se inventa ni se rellena). */
@@ -70,6 +72,9 @@ page.on("pageerror", (e) => console.error("pageerror:", e.message));
 await page.goto(`file://${htmlPath}`);
 await page.addScriptTag({ content: `window.VERSES=${JSON.stringify(VERSES)};` });
 await page.addScriptTag({ path: path.join(here, "engine.js") });
+// kits compartidos (personajes, etc.): video/lib/*.js
+const libDir = path.join(here, "lib");
+if (existsSync(libDir)) for (const f of readdirSync(libDir).filter((x) => x.endsWith(".js")).sort()) await page.addScriptTag({ path: path.join(libDir, f) });
 await page.addScriptTag({ path: storyFile });
 const total = await page.evaluate(async (s) => window.__video.ready(window.STORIES[s]), story);
 console.log(`Duración: ${total.toFixed(1)} s · ${Math.round(total * fps)} fotogramas`);
@@ -92,8 +97,15 @@ function speechText(text) {
   return t;
 }
 
-/** Narración con Azure Voz (neuronal): una llamada por página de subtítulos; se cachea por texto+voz+velocidad. */
-async function synth(text) {
+/** Tono de la narración con OpenAI (gpt-4o-mini-tts): calmado, cálido y humano; el versículo, más pausado. */
+const OPENAI_INSTR = {
+  narr: "Habla en español latinoamericano neutro, con una voz cálida, serena y armoniosa, como quien cuenta una historia en voz baja a alguien que acompaña. Ritmo pausado y natural, con pausas suaves en comas y puntos. Sin dramatismo ni tono de locutor: íntimo, humano y tranquilo.",
+  verse: "Lee con una voz cálida, serena y reverente, como quien comparte unas palabras de paz. Con calma pero con fluidez natural, sin alargar las palabras ni dramatizar: suave, íntimo y tranquilo. Respira entre frases.",
+};
+
+/** Narración: Azure Voz o OpenAI. Una llamada por frase/versículo completo; se cachea por proveedor+voz+tono+texto. */
+async function synth(text, kind = "narr") {
+  if (ttsProvider === "openai") return synthOpenAI(text, kind);
   const key = createHash("sha1").update(`${voiceName}|${voiceRate}|${text}`).digest("hex").slice(0, 16);
   const file = path.join(outDir, ".tts", `${key}.mp3`);
   if (existsSync(file)) return file;
@@ -118,6 +130,33 @@ async function synth(text) {
     const body = existsSync(file) ? readFileSync(file, "utf8").slice(0, 200) : "";
     if (existsSync(file)) rmSync(file);
     throw new Error(`Azure TTS ${code}: ${body}`);
+  }
+  return file;
+}
+async function synthOpenAI(text, kind) {
+  const instructions = OPENAI_INSTR[kind] ?? OPENAI_INSTR.narr;
+  const key = createHash("sha1").update(`openai|${voiceName}|${instructions}|${text}`).digest("hex").slice(0, 16);
+  const raw = path.join(outDir, ".tts", `${key}.mp3`);
+  const file = voiceTempo === 1 ? raw : path.join(outDir, ".tts", `${key}-t${voiceTempo}.mp3`);
+  if (existsSync(file)) return file;
+  mkdirSync(path.dirname(file), { recursive: true });
+  const body = JSON.stringify({ model: "gpt-4o-mini-tts", voice: voiceName, input: text, instructions, response_format: "mp3" });
+  let code = "";
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    const r = spawnSync("curl", ["-sS", "-m", "90", "-X", "POST", "https://api.openai.com/v1/audio/speech", "-H", "Content-Type: application/json", "-d", "@-", "-o", raw, "-w", "%{http_code}"], { input: body });
+    code = r.stdout.toString().trim();
+    if (code === "200") break;
+    if (code !== "429" && code !== "500" && code !== "503") break;
+    await new Promise((res) => setTimeout(res, 3000 * attempt));
+  }
+  if (code !== "200") {
+    const msg = existsSync(raw) ? readFileSync(raw, "utf8").slice(0, 200) : "";
+    if (existsSync(raw)) rmSync(raw);
+    throw new Error(`OpenAI TTS ${code}: ${msg}`);
+  }
+  if (voiceTempo !== 1) {
+    const t = spawnSync("ffmpeg", ["-y", "-loglevel", "error", "-i", raw, "-filter:a", `atempo=${voiceTempo}`, file]);
+    if (t.status !== 0) throw new Error(t.stderr.toString());
   }
   return file;
 }
@@ -159,7 +198,7 @@ if (useVoice) {
   for (const v of verses) {
     const spoken = speechText(v.idx.map((i) => pages[i].text).join(" "));
     chars += spoken.length;
-    const file = await synth(spoken);
+    const file = await synth(spoken, v.gid.startsWith("line") ? "narr" : "verse");
     const dur = mp3Duration(file);
     const { lead, tail, pauses } = speechMap(file, dur);
     // límites de página: proporcionales a los caracteres y ajustados a la pausa natural más cercana
@@ -173,7 +212,10 @@ if (useVoice) {
       const near = pauses.reduce((best, p) => (Math.abs(p - est) < Math.abs(best - est) ? p : best), est);
       bounds.push(Math.abs(near - est) <= 0.7 ? near : est);
     }
-    bounds.push(dur + 0.25);
+    // pausa serena tras cada frase; más larga antes de la Escritura
+    const nextV = verses[verses.indexOf(v) + 1];
+    const gap = ttsProvider === "openai" ? (!nextV ? 0.4 : nextV.gid.startsWith("line") ? 0.4 : 0.75) : 0.25;
+    bounds.push(dur + gap);
     v.idx.forEach((pi, k) => {
       durs[pi] = Math.max(0.5, bounds[k + 1] - bounds[k] - 0.1);
     });
@@ -182,7 +224,7 @@ if (useVoice) {
   const { total: t2, starts } = await page.evaluate((d) => window.__video.retime(d), durs);
   totalFinal = t2;
   voiceClips = clips.map((c) => ({ f: c.file, at: starts[c.firstPage] }));
-  console.log(`Voz ${voiceName}: ${verses.length} versículos, ${chars} caracteres · duración final ${t2.toFixed(1)} s`);
+  console.log(`Voz ${ttsProvider}/${voiceName}: ${verses.length} versículos, ${chars} caracteres · duración final ${t2.toFixed(1)} s`);
 }
 
 if (stills.length) {

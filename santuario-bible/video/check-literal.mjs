@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 /* Comprueba que el texto mostrado en cada video es EXACTAMENTE el versículo del catálogo (sin palabras añadidas, quitadas ni cambiadas). */
 import { createRequire } from "node:module";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo" };
+const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo", ISA: "Isaías", JER: "Jeremías", PHP: "Filipenses", PSA: "Salmos", JHN: "Juan" };
 const norm = (s) => s.replace(/\s+/g, " ").trim();
 let bad = 0;
 const browser = await chromium.launch();
-for (const story of ["david", "jose", "daniel", "noche"]) {
+const stories = readdirSync(path.join(here, "stories")).filter((f) => f.endsWith(".js")).map((f) => f.replace(".js", ""));
+for (const story of stories) {
   const src = readFileSync(path.join(here, "stories", `${story}.js`), "utf8");
   const keys = [...new Set([...src.matchAll(/"([A-Z0-9]{3}\.\d+\.\d+)"/g)].map((m) => m[1]))];
   const VERSES = {};
@@ -25,6 +26,8 @@ for (const story of ["david", "jose", "daniel", "noche"]) {
   await page.goto("about:blank");
   await page.addScriptTag({ content: `window.VERSES=${JSON.stringify(VERSES)};` });
   await page.addScriptTag({ path: path.join(here, "engine.js") });
+  const libDir = path.join(here, "lib");
+  if (existsSync(libDir)) for (const f of readdirSync(libDir).filter((x) => x.endsWith(".js")).sort()) await page.addScriptTag({ path: path.join(libDir, f) });
   await page.addScriptTag({ path: path.join(here, "stories", `${story}.js`) });
   await page.evaluate((s) => window.__video.ready(window.STORIES[s]), story);
   const pages = await page.evaluate(() => window.__video.pagesText());
