@@ -36,7 +36,7 @@ const stills = opt("stills", "")
   .map(Number);
 mkdirSync(outDir, { recursive: true });
 
-const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel" };
+const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo" };
 const SOURCE = "RV 1909";
 
 /** Lee un versículo literal del catálogo verificado. Falla si falta o está vacío (no se inventa ni se rellena). */
@@ -150,8 +150,8 @@ if (useVoice) {
   const verses = [];
   pages.forEach((p, i) => {
     const last = verses[verses.length - 1];
-    if (last && last.ref === p.ref) last.idx.push(i);
-    else verses.push({ ref: p.ref, idx: [i] });
+    if (last && last.gid === p.gid) last.idx.push(i);
+    else verses.push({ gid: p.gid, idx: [i] });
   });
   const durs = new Array(pages.length).fill(0);
   const clips = [];

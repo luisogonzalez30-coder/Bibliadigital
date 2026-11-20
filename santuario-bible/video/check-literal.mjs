@@ -8,11 +8,11 @@ const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
-const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel" };
+const BOOKS = { "1SA": "1 Samuel", GEN: "Génesis", DAN: "Daniel", MAT: "Mateo" };
 const norm = (s) => s.replace(/\s+/g, " ").trim();
 let bad = 0;
 const browser = await chromium.launch();
-for (const story of ["david", "jose", "daniel"]) {
+for (const story of ["david", "jose", "daniel", "noche"]) {
   const src = readFileSync(path.join(here, "stories", `${story}.js`), "utf8");
   const keys = [...new Set([...src.matchAll(/"([A-Z0-9]{3}\.\d+\.\d+)"/g)].map((m) => m[1]))];
   const VERSES = {};
