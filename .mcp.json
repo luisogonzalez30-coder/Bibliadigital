@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "apixo": {
+      "type": "http",
+      "url": "https://mcp.apixo.ai/mcp"
+    }
+  }
+}
